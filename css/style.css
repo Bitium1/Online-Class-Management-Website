@@ -1,7 +1,11 @@
 .header{
-    color: red;
+   padding-top: 0.5%;
+   color: var(--black);
 }
-
+.heading-name{
+   font-family: 'Gravitas One';
+   font-size: 22px;
+}
 
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700&display=swap');
 
@@ -78,7 +82,9 @@ section{
    padding-bottom: 1.5rem;
    text-transform: capitalize;
 }
-
+.txt-btn{
+   font: size 5rem; 
+}
 .inline-btn,
 .inline-option-btn,
 .inline-delete-btn,
@@ -100,6 +106,7 @@ section{
 .option-btn{
    display: block;
    width: 100%;
+   
 }
 
 .inline-btn,
@@ -117,6 +124,7 @@ section{
 .inline-option-btn{
    background-color:var(--orange);
 }
+
 
 .delete-btn,
 .inline-delete-btn{
@@ -334,7 +342,13 @@ section{
 .side-bar.active{
    left: -30rem;
 }
-
+.container-background{
+   background-color: var(--light-bg);
+   grid-template-columns: repeat(auto-fit, 27.5rem);
+   gap:1.5rem;
+   justify-content: center;
+   align-items: flex-start;
+}
 .home-grid .box-container{
    display: grid;
    grid-template-columns: repeat(auto-fit, 27.5rem);
