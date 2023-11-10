@@ -1,101 +1,121 @@
+<?php
+
+include 'components/connect.php';
+
+if(isset($_COOKIE['user_id'])){
+   $user_id = $_COOKIE['user_id'];
+}else{
+   $user_id = '';
+}
+
+if(isset($_POST['submit'])){
+
+   $id = unique_id();
+   $name = $_POST['name'];
+   $name = filter_var($name, FILTER_SANITIZE_STRING);
+   $email = $_POST['email'];
+   $email = filter_var($email, FILTER_SANITIZE_STRING);
+   $pass = sha1($_POST['pass']);
+   $pass = filter_var($pass, FILTER_SANITIZE_STRING);
+   $cpass = sha1($_POST['cpass']);
+   $cpass = filter_var($cpass, FILTER_SANITIZE_STRING);
+
+   $image = $_FILES['image']['name'];
+   $image = filter_var($image, FILTER_SANITIZE_STRING);
+   $ext = pathinfo($image, PATHINFO_EXTENSION);
+   $rename = unique_id().'.'.$ext;
+   $image_size = $_FILES['image']['size'];
+   $image_tmp_name = $_FILES['image']['tmp_name'];
+   $image_folder = 'uploaded_files/'.$rename;
+
+   $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ?");
+   $select_user->execute([$email]);
+   
+   if($select_user->rowCount() > 0){
+      $message[] = 'email already taken!';
+   }else{
+      if($pass != $cpass){
+         $message[] = 'confirm passowrd not matched!';
+      }else{
+         $insert_user = $conn->prepare("INSERT INTO `users`(id, name, email, password, image) VALUES(?,?,?,?,?)");
+         $insert_user->execute([$id, $name, $email, $cpass, $rename]);
+         move_uploaded_file($image_tmp_name, $image_folder);
+         
+         $verify_user = $conn->prepare("SELECT * FROM `users` WHERE email = ? AND password = ? LIMIT 1");
+         $verify_user->execute([$email, $pass]);
+         $row = $verify_user->fetch(PDO::FETCH_ASSOC);
+         
+         if($verify_user->rowCount() > 0){
+            setcookie('user_id', $row['id'], time() + 60*60*24*30, '/');
+            header('location:home.php');
+         }
+      }
+   }
+
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>login</title>
+   <title>home</title>
 
    <!-- font awesome cdn link  -->
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
-   <link href='https://fonts.googleapis.com/css?family=Gravitas One' rel='stylesheet'>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+
    <!-- custom css file link  -->
    <link rel="stylesheet" href="css/style.css">
 
 </head>
 <body>
-   
-  
-  
-<header class="header">
-   <h1 align="center" class="heading-name">Vishwa Higher Educational Institute</h1>
-   <section class="flex">
 
-      
-
-      <form action="search.html" method="post" class="search-form">
-         <input type="text" name="search_box" required placeholder="Search Courses..." maxlength="100">
-         <button type="submit" class="fas fa-search"></button>
-      </form>
-
-      <div class="icons">
-         <div id="menu-btn" class="fas fa-bars"></div>
-         <div id="search-btn" class="fas fa-search"></div>
-         <div id="user-btn" class="fas fa-user"></div>
-         <div id="toggle-btn" class="fas fa-sun"></div>
-      </div>
-
-
-   </section>
-
-</header>   
-
-<div class="side-bar">
-
-   <div id="close-btn">
-      <i class="fas fa-times"></i>
-   </div>
-
-   <div class="profile">
-      <img src="images/view-3d-woman_23-2150709984.webp" class="image" alt="">
-      <h3 class="name">Rashmika Malshani</h3>
-      <p class="role">Student</p>
-      <a href="profile.html" class="btn">View Profile</a>
-   </div>
-
-   <nav class="navbar">
-      <a href="home.html"><i class="fas fa-home"></i><span>Home</span></a>
-      <a href="about.html"><i class="fas fa-question"></i><span>About</span></a>
-      <a href="courses.html"><i class="fas fa-graduation-cap"></i><span>courses</span></a>
-      <a href="teachers.html"><i class="fas fa-chalkboard-user"></i><span>Teachers</span></a>
-      <a href="contact.html"><i class="fas fa-headset"></i><span>Contact Us</span></a>
-   </nav>
-
-</div>
+<?php include 'components/user_header.php'; ?>
 
 <section class="form-container">
 
-   <form action="" method="post" enctype="multipart/form-data">
-      <h3>Register Now</h3>
-      <p>Name <span>*</span></p>
-      <input type="text" name="name" placeholder="Enter Your Name" required maxlength="50" class="box">
-      <p>Email <span>*</span></p>
-      <input type="email" name="email" placeholder="Enter Your Email" required maxlength="50" class="box">
-      <p>Password <span>*</span></p>
-      <input type="password" name="pass" placeholder="Enter Your Password" required maxlength="20" class="box">
-      <p>Confirm Password <span>*</span></p>
-      <input type="password" name="c_pass" placeholder="Confirm Your Password" required maxlength="20" class="box">
-      <p>Select Profile <span>*</span></p>
-      <input type="file" accept="image/*" required class="box">
-      <input type="submit" value="Register now" name="submit" class="btn">
+   <form class="register" action="" method="post" enctype="multipart/form-data">
+      <h3>create account</h3>
+      <div class="flex">
+         <div class="col">
+            <p>your name <span>*</span></p>
+            <input type="text" name="name" placeholder="eneter your name" maxlength="50" required class="box">
+            <p>your email <span>*</span></p>
+            <input type="email" name="email" placeholder="enter your email" maxlength="20" required class="box">
+         </div>
+         <div class="col">
+            <p>your password <span>*</span></p>
+            <input type="password" name="pass" placeholder="enter your password" maxlength="20" required class="box">
+            <p>confirm password <span>*</span></p>
+            <input type="password" name="cpass" placeholder="confirm your password" maxlength="20" required class="box">
+         </div>
+      </div>
+      <p>select pic <span>*</span></p>
+      <input type="file" name="image" accept="image/*" required class="box">
+      <p class="link">already have an account? <a href="login.php">login now</a></p>
+      <input type="submit" name="submit" value="register now" class="btn">
    </form>
 
 </section>
 
 
-<footer class="footer">
 
-   <div class="container-fluid d-none d-md-block" id="headder1">
-      <div class="d-flex justify-content-between text-grey text-center">
-          <div class="p-1"><a href="mailto:info@vishwaedu.com ">      | E-mail: info@vishwaedu.com |</a>       Hotline: 011-2 214 214 |     | Whatsapp: 077-7 214 214 |</div>
-         
-      </div>
-  </div>
-</footer>
+
+
+
+
+
+
+
+
+
+<?php include 'components/footer.php'; ?>
 
 <!-- custom js file link  -->
 <script src="js/script.js"></script>
-
    
 </body>
 </html>
