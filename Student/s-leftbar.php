@@ -21,6 +21,15 @@
                                         <span class="">Appearance</span>
                                     </li>
                                     <li class="has-children">
+                                        <a href="#"><i class="fa fa-users"></i> <span>Profile</span> <i class="fa fa-angle-right arrow"></i></a>
+                                        <ul class="child-nav">
+                                            <li><a href="add-students.php"><i class="fa fa-bars"></i> <span>View Profile</span></a></li>
+                                            <li><a href="manage-students.php"><i class="fa fa fa-server"></i> <span>Manage Profile</span></a></li>
+                                           
+                                        </ul>
+                                    </li>
+
+                                    <li class="has-children">
                                         <a href="#"><i class="fa fa-file-text"></i> <span>Classes</span> <i class="fa fa-angle-right arrow"></i></a>
                                         <ul class="child-nav">
                                             <li><a href="Add-class.php"><i class="fa fa-bars"></i> <span>Add Class</span></a></li>
@@ -42,31 +51,21 @@
  <li class="has-children">
                                         <a href="#"><i class="fa fa-file-text"></i> <span>Videos</span> <i class="fa fa-angle-right arrow"></i></a>
                                         <ul class="child-nav">
-                                            <li><a href="add-video.php"><i class="fa fa-bars"></i> <span>Add Video</span></a></li>
-                                            <li><a href="manage-video.php"><i class="fa fa fa-server"></i> <span>Manage Video</span></a></li>
+
                                             <li><a href="view-Video.php"><i class="fa fa-newspaper-o"></i> <span>View video</span></a></li>
-                                            <li><a href="delete-video.php"><i class="fa fa fa-server"></i> <span>Delete Video</span></a></li>
                                            
                                            
                                         </ul>
                                     </li>
                                     
-   <li class="has-children">
-                                        <a href="#"><i class="fa fa-users"></i> <span>Students</span> <i class="fa fa-angle-right arrow"></i></a>
-                                        <ul class="child-nav">
-                                            <li><a href="add-students.php"><i class="fa fa-bars"></i> <span>Add Students</span></a></li>
-                                            <li><a href="manage-students.php"><i class="fa fa fa-server"></i> <span>Manage Students</span></a></li>
-                                           
-                                        </ul>
-                                    </li>
+   
 <li class="has-children">
                                         <a href="#"><i class="fa fa-info-circle"></i> <span>Result</span> <i class="fa fa-angle-right arrow"></i></a>
                                         <ul class="child-nav">
-                                            <li><a href="add-result.php"><i class="fa fa-bars"></i> <span>Add Result</span></a></li>
-                                            <li><a href="manage-results.php"><i class="fa fa fa-server"></i> <span>Manage Result</span></a></li>
-                                           
+                                            <li><a href="find-result.php"><i class="fa fa-bars"></i> <span>View Result</span></a></li>
+                                            
                                         </ul>
-                                        <li><a href="change-password.php"><i class="fa fa fa-server"></i> <span> Admin Change Password</span></a></li>
+                                        <li><a href="s-change-password.php"><i class="fa fa fa-server"></i> <span>Change Password</span></a></li>
                                            
                                     </li>
                             </div>
