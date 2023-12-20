@@ -89,7 +89,7 @@ return true;
                         <div class="container-fluid">
                             <div class="row page-title-div">
                                 <div class="col-md-6">
-                                    <h2 class="title">Admin Change Password</h2>
+                                    <h2 class="title">Change Password</h2>
                                 </div>
                                 
                             </div>
@@ -99,7 +99,7 @@ return true;
                                     <ul class="breadcrumb">
             							<li><a href="dashboard.php"><i class="fa fa-home"></i> Home</a></li>
             						
-            							<li class="active">Admin change password</li>
+            							<li class="active">Change Password</li>
             						</ul>
                                 </div>
                                
@@ -120,7 +120,7 @@ return true;
                                         <div class="panel">
                                             <div class="panel-heading">
                                                 <div class="panel-title">
-                                                    <h5>Admin Change Password</h5>
+                                                    <h5>Change Password</h5>
                                                 </div>
                                             </div>
            <?php if($msg){?>

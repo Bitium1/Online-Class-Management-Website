@@ -72,7 +72,7 @@ foreach($results as $result)
                             </div>
                         </div>
                         <!-- /.panel -->
-                        <p class="text-muted text-center"><small>Copyright © 2020 SRMS</small></p>
+                        <p class="text-muted text-center"><small>Copyright @Bitium</small></p>
                     </div>
                     <!-- /.col-md-6 col-md-offset-3 -->
                 </div>

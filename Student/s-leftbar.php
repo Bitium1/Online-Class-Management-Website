@@ -29,25 +29,7 @@
                                         </ul>
                                     </li>
 
-                                    <li class="has-children">
-                                        <a href="#"><i class="fa fa-file-text"></i> <span>Classes</span> <i class="fa fa-angle-right arrow"></i></a>
-                                        <ul class="child-nav">
-                                            <li><a href="Add-class.php"><i class="fa fa-bars"></i> <span>Add Class</span></a></li>
-                                            <li><a href="View-classes.php"><i class="fa fa fa-server"></i> <span>View Class</span></a></li>
-                                            <li><a href="Delete-classes.php"><i class="fa fa fa-server"></i> <span>Delete Class</span></a></li>
-                                            
-                                           
-                                        </ul>
-                                    </li>
-  <li class="has-children">
-                                        <a href="#"><i class="fa fa-file-text"></i> <span>Subjects</span> <i class="fa fa-angle-right arrow"></i></a>
-                                        <ul class="child-nav">
-                                            <li><a href="Add-subject.php"><i class="fa fa-bars"></i> <span>Add Subject</span></a></li>
-                                            <li><a href="View-subjects.php"><i class="fa fa fa-server"></i> <span>View Subjects</span></a></li>
-                                            <li><a href="Delete-subjects.php"><i class="fa fa fa-server"></i> <span>Delete Subjects</span></a></li>
-                                           
-                                        </ul>
-                                    </li>
+                                   
  <li class="has-children">
                                         <a href="#"><i class="fa fa-file-text"></i> <span>Videos</span> <i class="fa fa-angle-right arrow"></i></a>
                                         <ul class="child-nav">
