@@ -1,7 +1,7 @@
 <?php
 session_start();
 error_reporting(0);
-include('includes/config.php');
+include('config.php');
 if($_SESSION['alogin']!=''){
 $_SESSION['alogin']='';
 }
@@ -39,7 +39,7 @@ echo "<script type='text/javascript'> document.location = 'dashboard.php'; </scr
         <link rel="stylesheet" href="css/bootstrap.min.css" media="screen" >
         <link rel="stylesheet" href="css/font-awesome.min.css" media="screen" >
         <link rel="stylesheet" href="css/animate-css/animate.min.css" media="screen" >
-        <link rel="stylesheet" href="css/prism/prism.css" media="screen" > <!-- USED FOR DEMO HELP - YOU CAN REMOVE IT -->
+        <link rel="stylesheet" href="css/prism/prism.css" media="screen" > 
         <link rel="stylesheet" href="css/main.css" media="screen" >
         <script src="js/modernizr/modernizr.min.js"></script>
     </head>
@@ -92,13 +92,13 @@ echo "<script type='text/javascript'> document.location = 'dashboard.php'; </scr
                                                     		</div>
                                                     	</div>
                                                     </form>
-                                                    
-                                                    <p class="link">student login <a href="Student/s-dashboard.php">register now</a></p>
-      
+
+                                                    <p class="link">student login <a href="Student/s-dashboard.php">student login</a></p>
+
 
 
                                                     <p class="link">Don't have an account? <a href="Student/register.php">register now</a></p>
-      
+
 
 
 
@@ -156,11 +156,11 @@ echo "<script type='text/javascript'> document.location = 'dashboard.php'; </scr
                                                     		</div>
                                                     	</div>
                                                         <p class="link">don't have an account? <a href="Student/register.php">register now</a></p>
-      
+
 
                                                     </form>
-                                                    
-                                                   
+
+
 
 
                                                 </div>
@@ -205,6 +205,6 @@ echo "<script type='text/javascript'> document.location = 'dashboard.php'; </scr
             });
         </script>
 
-        <!-- ========== ADD custom.js FILE BELOW WITH YOUR CHANGES ========== -->
+        
     </body>
 </html>
