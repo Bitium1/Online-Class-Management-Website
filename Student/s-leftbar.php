@@ -47,9 +47,31 @@
                                             <li><a href="find-result.php"><i class="fa fa-bars"></i> <span>View Result</span></a></li>
                                             
                                         </ul>
+<<<<<<< HEAD
                                         <li><a href="s-change-password.php"><i class="fa fa fa-server"></i> <span>Change Password</span></a></li>
                                            
                                     </li>
+=======
+                                        
+<li class="has-children">
+                                        <a href="#"><i class="fa fa-file-text"></i> <span>get in touch</span> <i class="fa fa-angle-right arrow"></i></a>
+                                        <ul class="child-nav">
+
+                                            <li><a href="get in touch.php"><i class="fa fa-newspaper-o"></i> <span>get in touch</span></a></li>
+                                           
+                                           
+                                        </ul>
+                                    </li> 
+ <li class="has-children">
+                                        <a href="#"><i class="fa fa-file-text"></i> <span>change password</span> <i class="fa fa-angle-right arrow"></i></a>
+                                        <ul class="child-nav">
+
+                                            <li><a href="s-change-password.php"><i class="fa fa-newspaper-o"></i> <span>change password</span></a></li>
+                                           
+                                           
+                                        </ul>
+                                    </li>                                                                                          
+>>>>>>> origin/Aisha
                             </div>
                             <!-- /.sidebar-nav -->
                         </div>

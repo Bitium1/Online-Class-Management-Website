@@ -4,7 +4,11 @@ error_reporting(0);
 include('includes/config.php');
 if(strlen($_SESSION['alogin'])=="")
     {
+<<<<<<< HEAD
     header("Location:../ index.php");
+=======
+    header("Location: index.php");
+>>>>>>> origin/Aisha
     }
     else{
         ?>
@@ -39,7 +43,11 @@ if(strlen($_SESSION['alogin'])=="")
                         <div class="container-fluid">
                             <div class="row page-title-div">
                                 <div class="col-sm-6">
+<<<<<<< HEAD
                                     <h2 class="title">Dashboard</h2>
+=======
+                                    <h2 class="title">Student Dashboard</h2>
+>>>>>>> origin/Aisha
 
                                 </div>
                                 <!-- /.col-sm-6 -->
@@ -53,6 +61,7 @@ if(strlen($_SESSION['alogin'])=="")
                             <div class="container-fluid">
                                 <div class="row">
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+<<<<<<< HEAD
                                         <a class="dashboard-stat bg-primary" href="manage-students.php">
 <?php
 $sql1 ="SELECT StudentId from tblstudents ";
@@ -64,6 +73,13 @@ $totalstudents=$query1->rowCount();
 
                                             <span class="number counter"><?php echo htmlentities($totalstudents);?></span>
                                             <span class="name">Regd Users</span>
+=======
+                                        <a class="dashboard-stat bg-primary" href="video.php">
+
+
+                                            <span class="number counter"><?php echo htmlentities($totalstudents);?></span>
+                                            <span class="name">video</span>
+>>>>>>> origin/Aisha
                                             <span class="bg-icon"><i class="fa fa-users"></i></span>
                                         </a>
                                         <!-- /.dashboard-stat -->
@@ -71,6 +87,7 @@ $totalstudents=$query1->rowCount();
                                     <!-- /.col-lg-3 col-md-3 col-sm-6 col-xs-12 -->
 
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+<<<<<<< HEAD
                                         <a class="dashboard-stat bg-danger" href="manage-subjects.php">
 <?php
 $sql ="SELECT id from  tblsubjects ";
@@ -98,12 +115,20 @@ $totalclasses=$query2->rowCount();
 ?>
                                             <span class="number counter"><?php echo htmlentities($totalclasses);?></span>
                                             <span class="name">Total classes listed</span>
+=======
+                                        <a class="dashboard-stat bg-danger" href="find-result.php">
+
+
+                                            <span class="number counter"><?php echo htmlentities($totalclasses);?></span>
+                                            <span class="name">Result</span>
+>>>>>>> origin/Aisha
                                             <span class="bg-icon"><i class="fa fa-bank"></i></span>
                                         </a>
                                         <!-- /.dashboard-stat -->
                                     </div>
                                     <!-- /.col-lg-3 col-md-3 col-sm-6 col-xs-12 -->
 
+<<<<<<< HEAD
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <a class="dashboard-stat bg-success" href="manage-results.php">
                                         <?php
@@ -119,6 +144,10 @@ $totalresults=$query3->rowCount();
                                             <span class="bg-icon"><i class="fa fa-file-text"></i></span>
                                         </a>
                                         <!-- /.dashboard-stat -->
+=======
+                                    
+                                        <!-- /.s-dashboard-stat -->
+>>>>>>> origin/Aisha
                                     </div>
                                     <!-- /.col-lg-3 col-md-3 col-sm-6 col-xs-12 -->
 
