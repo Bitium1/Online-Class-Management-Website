@@ -4,14 +4,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 include('config.php');
-<<<<<<< HEAD
-=======
-if($_SESSION['login']!=''){
-    $_SESSION['login']='';
-    }
-    if(isset($_POST['login']))
-    
->>>>>>> origin/Aisha
 
 $message = '';
 
@@ -24,13 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phoneNumber = $_POST['phoneNumber'];
     $subject = $_POST['subject']; // Corrected: Added the subject field
     $roleId = $_POST['roleId'];
-<<<<<<< HEAD
     $username = $_POST['username'];
     $password = $_POST['password'];
-=======
-    $password = $POST['password'];
-    $username = $_POST['username'];
->>>>>>> origin/Aisha
     $confirmPassword = $_POST['confirm_password'];
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
@@ -44,13 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $registrationDate = date('Y-m-d');
 
         // Perform database insertion
-<<<<<<< HEAD
         $sql = "INSERT INTO student (first_name, last_name, birthday, gender, email, phone_number, subject, role_id, registration_date, username, password)
                 VALUES (:firstName, :lastName, :birthdayDate, :gender, :emailAddress, :phoneNumber, :subject, :roleId, :registrationDate, :username, :password)";
-=======
-        $sql = "INSERT INTO tblstudents (first_name, last_name, birthday, gender, email, phone_number, subject, role_id,  username, password)
-                VALUES (:firstName, :lastName, :birthdayDate, :gender, :emailAddress, :phoneNumber, :subject, :roleId,  :username, :password)";
->>>>>>> origin/Aisha
          
         
          
@@ -73,18 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $message = 'Error occurred.';
         }
-<<<<<<< HEAD
-=======
-        if($query->rowCount() > 0)
-{
-$_SESSION['alogin']=$_POST['username'];
-echo "<script type='text/javascript'> document.location = 'student/s-dashboard.php'; </script>";
-} else{
-
-    echo "<script>alert('Invalid Details');</script>";
-
-}
->>>>>>> origin/Aisha
     }
 }
 ?>

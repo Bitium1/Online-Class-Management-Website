@@ -47,11 +47,6 @@
                                             <li><a href="find-result.php"><i class="fa fa-bars"></i> <span>View Result</span></a></li>
                                             
                                         </ul>
-<<<<<<< HEAD
-                                        <li><a href="s-change-password.php"><i class="fa fa fa-server"></i> <span>Change Password</span></a></li>
-                                           
-                                    </li>
-=======
                                         
 <li class="has-children">
                                         <a href="#"><i class="fa fa-file-text"></i> <span>get in touch</span> <i class="fa fa-angle-right arrow"></i></a>
@@ -71,7 +66,6 @@
                                            
                                         </ul>
                                     </li>                                                                                          
->>>>>>> origin/Aisha
                             </div>
                             <!-- /.sidebar-nav -->
                         </div>
