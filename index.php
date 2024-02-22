@@ -5,29 +5,62 @@ include('config.php');
 if($_SESSION['alogin']!=''){
 $_SESSION['alogin']='';
 }
-if(isset($_POST['login']))
-{
-$uname=$_POST['username'];
-$password=md5($_POST['password']);
-$sql ="SELECT UserName,Password FROM admin WHERE UserName=:uname and Password=:password";
-$query= $dbh -> prepare($sql);
-$query-> bindParam(':uname', $uname, PDO::PARAM_STR);
-$query-> bindParam(':password', $password, PDO::PARAM_STR);
-$query-> execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
-if($query->rowCount() > 0)
-{
-$_SESSION['alogin']=$_POST['username'];
-echo "<script type='text/javascript'> document.location = 'dashboard.php'; </script>";
-} else{
 
-    echo "<script>alert('Invalid Details');</script>";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if ($_POST['form_name'] === 'teacher'){
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
+    // Retrieve hashed password from the database
+    $stmt = $dbh->prepare("SELECT id, password FROM teacher WHERE username = :username");
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($row) {
+        // Verify password
+        if (password_verify($password, $row['password'])) {
+            // Password is correct, set session variables
+            $_SESSION['teacher_id'] = $row['id'];
+            $_SESSION['username'] = $username;
+            header("Location: dashboard.php");
+            exit();
+        } else {
+            $error = "Invalid username or password";
+        }
+    } else {
+        $error = "Invalid username or password";
+    }
 }
 
-}
+else if($_POST['form_name'] === 'student'){
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
+    // Retrieve hashed password from the database
+    $stmt = $dbh->prepare("SELECT id, password FROM student WHERE username = :username");
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($row) {
+        // Verify password
+        if (password_verify($password, $row['password'])) {
+            // Password is correct, set session variables
+            $_SESSION['student_id'] = $row['id'];
+            $_SESSION['username'] = $username;
+            header("Location: Student/s-dashboard.php");
+            exit();
+        } else {
+            $error = "Invalid username or password";
+        }
+    } else {
+        $error = "Invalid username or password";
+    }
+}
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -71,15 +104,19 @@ echo "<script type='text/javascript'> document.location = 'dashboard.php'; </scr
                                                         <p class="sub-title">Online Class Management System</p>
                                                     </div>
 
-                                                    <form class="form-horizontal" method="post">
+                                                    <?php if (isset($error)): ?>
+                                                        <div><?php echo $error; ?></div>
+                                                    <?php endif; ?>
+                                                    <form class="form-horizontal" method="post" name="student">
+                                                    <input type="hidden" name="form_name" value="student">
                                                     	<div class="form-group">
-                                                    		<label for="inputEmail3" class="col-sm-2 control-label">Username</label>
+                                                    		<label for="username" class="col-sm-2 control-label">Username</label>
                                                     		<div class="col-sm-10">
-                                                    			<input type="text" name="username" class="form-control" id="inputEmail3" placeholder="UserName">
+                                                    			<input type="text" name="username" class="form-control" id="username" name="username" required>
                                                     		</div>
                                                     	</div>
                                                     	<div class="form-group">
-                                                    		<label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+                                                    		<label for="password" class="col-sm-2 control-label" name="password" required>Password</label>
                                                     		<div class="col-sm-10">
                                                     			<input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Password">
                                                     		</div>
@@ -92,6 +129,7 @@ echo "<script type='text/javascript'> document.location = 'dashboard.php'; </scr
                                                     		</div>
                                                     	</div>
                                                     </form>
+
 
                                                     <p class="link">student login <a href="Student/s-dashboard.php">student login</a></p>
 
@@ -135,15 +173,19 @@ echo "<script type='text/javascript'> document.location = 'dashboard.php'; </scr
                                                         <p class="sub-title">Online Class Management System</p>
                                                     </div>
 
-                                                    <form class="form-horizontal" method="post">
+                                                    <?php if (isset($error)): ?>
+                                                        <div><?php echo $error; ?></div>
+                                                    <?php endif; ?>
+                                                    <form class="form-horizontal" method="post" name="teacher">
+                                                    <input type="hidden" name="form_name" value="teacher">
                                                     	<div class="form-group">
-                                                    		<label for="inputEmail3" class="col-sm-2 control-label">Username</label>
+                                                    		<label for="username" class="col-sm-2 control-label">Username</label>
                                                     		<div class="col-sm-10">
-                                                    			<input type="text" name="username" class="form-control" id="inputEmail3" placeholder="UserName">
+                                                    			<input type="text" name="username" class="form-control" id="username" name="username" required>
                                                     		</div>
                                                     	</div>
                                                     	<div class="form-group">
-                                                    		<label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+                                                    		<label for="password" class="col-sm-2 control-label" name="password" required>Password</label>
                                                     		<div class="col-sm-10">
                                                     			<input type="password" name="password" class="form-control" id="inputPassword3" placeholder="Password">
                                                     		</div>
@@ -155,11 +197,11 @@ echo "<script type='text/javascript'> document.location = 'dashboard.php'; </scr
                                                     			<button type="submit" name="login" class="btn btn-success btn-labeled pull-right">Sign in<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span></button>
                                                     		</div>
                                                     	</div>
-                                                        <p class="link">don't have an account? <a href="register.php">register now</a></p>
-
-
                                                     </form>
 
+                                                        <p class="link">don't have an account? <a href="register.php">register now</a></p>
+
+ 
 
 
 

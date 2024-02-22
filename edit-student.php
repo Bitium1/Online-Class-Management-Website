@@ -5,7 +5,7 @@ if (strlen($_SESSION['alogin']) == "") {
     header("Location: index.php");
 } else {
     if (isset($_POST['submit'])) {
-        
+        $studentId = $_POST['studentId'];
         $firstName = $_POST['firstName'];
         $lastName = $_POST['lastName'];
         $birthdayDate = $_POST['birthdayDate'];
