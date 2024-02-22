@@ -2,6 +2,7 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
+
 if(strlen($_SESSION['alogin'])=="") {   
     header("Location: index.php"); 
 } else {
@@ -24,6 +25,7 @@ if(strlen($_SESSION['alogin'])=="") {
         $query->execute();
         $msg = "Video info updated successfully";
     }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -148,4 +150,3 @@ if(strlen($_SESSION['alogin'])=="") {
     </script>
 </body>
 </html>
-<?php } ?>
