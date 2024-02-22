@@ -8,27 +8,33 @@ if(strlen($_SESSION['alogin'])=="")
     }
     else{
 if(isset($_POST['submit']))
+{
+    $roll_id=$_POST['roll_id'];
+    $name=$_POST['name']; 
+    $email=$_POST['email'];
+    $class=$_POST['class'];  
+    $subject=$_POST['subject']; 
+    $msg=$_POST['msg']; 
+    $sql="INSERT INTO  contact(roll_id,name, email, class, subject, msg) VALUES(:roll_id,:name,:email,:class,:subject,:msg)";
+    $query = $dbh->prepare($sql);
+    $query->bindParam(':roll_id',$roll_id,PDO::PARAM_INT);
+    $query->bindParam(':name',$name,PDO::PARAM_STR);
+    $query->bindParam(':email',$email,PDO::PARAM_STR);
+    $query->bindParam(':class',$class,PDO::PARAM_STR);
+    $query->bindParam(':subject',$subject,PDO::PARAM_STR);
+    $query->bindParam(':msg',$msg,PDO::PARAM_STR);
+    $query->execute();
+    $lastInsertId = $dbh->lastInsertId();
+    if($lastInsertId)
     {
-        $name = $_POST['name']; 
-        $name = filter_var($name, FILTER_SANITIZE_STRING);
-        $email = $_POST['email']; 
-        $email = filter_var($email, FILTER_SANITIZE_STRING);
-        $class = $_POST['class']; 
-        $class = filter_var($class, FILTER_SANITIZE_STRING);
-        $msg = $_POST['msg']; 
-        $msg = filter_var($msg, FILTER_SANITIZE_STRING);
-     
-        $select_contact = $conn->prepare("SELECT * FROM `contact` WHERE name = ? AND email = ? AND class = ? AND message = ?");
-        $select_contact->execute([$name, $email, $class, $msg]);
-     
-        if($select_contact->rowCount() > 0){
-           $message[] = 'message sent already!';
-        }else{
-           $insert_message = $conn->prepare("INSERT INTO `contact`(name, email, class, message) VALUES(?,?,?,?)");
-           $insert_message->execute([$name, $email, $class, $msg]);
-           $message[] = 'message sent successfully!';
-        }
-}
+    $msg="message sent successfully";
+    }
+    else 
+    {
+    $error="Something went wrong. Please try again";
+    }
+    
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,16 +51,7 @@ if(isset($_POST['submit']))
         <link rel="stylesheet" href="../css/main.css" media="screen" >
         <script src="js/modernizr/modernizr.min.js"></script>
         <script type="text/javascript">
-function valid()
-{
-if(document.chngpwd.newpassword.value!= document.chngpwd.confirmpassword.value)
-{
-alert("New Password and Confirm Password Field do not match  !!");
-document.chngpwd.confirmpassword.focus();
-return false;
-}
-return true;
-}
+
 </script>
          <style>
         .errorWrap {
@@ -121,19 +118,21 @@ return true;
                                                     <h5>Contact Us</h5>
                                                 </div>
                                             </div>
-           <?php if($msg){?>
+          
+  
+  <div class="panel-body">
+
+  <?php if($msg){?>
 <div class="alert alert-success left-icon-alert" role="alert">
- <strong>Message sent!</strong><?php echo htmlentities($msg); ?>
+ <strong>Well done!</strong><?php echo htmlentities($msg); ?>
  </div><?php } 
 else if($error){?>
     <div class="alert alert-danger left-icon-alert" role="alert">
                                             <strong>Oh snap!</strong> <?php echo htmlentities($error); ?>
                                         </div>
                                         <?php } ?>
-  
-  <div class="panel-body">
 
-      <form  name="contact" method="post" \ onSubmit="return valid();">
+      <form  name="contact" method="post" >
           <div class="form-group has-success">
           <label for="rollid">Enter your Roll Id</label>
           <input type="text" class="form-control" id="rollid" placeholder="Enter Your Roll Id" autocomplete="off" name="rollid">
