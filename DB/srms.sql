@@ -227,6 +227,21 @@ ALTER TABLE `tblsubjects`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
+
+CREATE TABLE student (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    birthday DATE,
+    gender ENUM('Male', 'Female'),
+    email VARCHAR(255),
+    phone_number VARCHAR(20),
+    subject VARCHAR(255),
+    role_id INT,
+    registration_date DATE,
+    username VARCHAR(255),
+    password VARCHAR(255)
+);
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
