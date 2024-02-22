@@ -2,42 +2,61 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
-if(strlen($_SESSION['alogin'])=="")
-    {   
-    header("Location: index.php"); 
-    }
-    else{
-if(isset($_POST['submit']))
-{
-$studentname=$_POST['fullanme'];
-$roolid=$_POST['rollid']; 
-$studentemail=$_POST['emailid']; 
-$gender=$_POST['gender']; 
-$classid=$_POST['class']; 
-$dob=$_POST['dob']; 
-$status=1;
-$sql="INSERT INTO  tblstudents(StudentName,RollId,StudentEmail,Gender,ClassId,DOB,Status) VALUES(:studentname,:roolid,:studentemail,:gender,:classid,:dob,:status)";
-$query = $dbh->prepare($sql);
-$query->bindParam(':studentname',$studentname,PDO::PARAM_STR);
-$query->bindParam(':roolid',$roolid,PDO::PARAM_STR);
-$query->bindParam(':studentemail',$studentemail,PDO::PARAM_STR);
-$query->bindParam(':gender',$gender,PDO::PARAM_STR);
-$query->bindParam(':classid',$classid,PDO::PARAM_STR);
-$query->bindParam(':dob',$dob,PDO::PARAM_STR);
-$query->bindParam(':status',$status,PDO::PARAM_STR);
-$query->execute();
-$lastInsertId = $dbh->lastInsertId();
-if($lastInsertId)
-{
-$msg="Student info added successfully";
-}
-else 
-{
-$error="Something went wrong. Please try again";
-}
 
+if(strlen($_SESSION['alogin'])=="") {   
+    header("Location: index.php"); 
+} else {
+    if(isset($_POST['submit'])) {
+        $firstName = $_POST['firstName'];
+        $lastName = $_POST['lastName'];
+        $birthdayDate = $_POST['birthdayDate'];
+        $gender = $_POST['gender'];
+        $emailAddress = $_POST['emailAddress'];
+        $phoneNumber = $_POST['phoneNumber'];
+        $subject = $_POST['subject']; // Corrected: Added the subject field
+        $roleId = $_POST['roleId'];
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $confirmPassword = $_POST['confirm_password'];
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        // Validate form inputs
+        if (empty($firstName) || empty($lastName) || empty($birthdayDate) || empty($gender) || empty($emailAddress) || empty($phoneNumber) || empty($subject) || empty($roleId) || empty($username) || empty($password) || empty($confirmPassword)) {
+            $message = 'Please fill all the fields';
+        } elseif ($password !== $confirmPassword) {
+            $message = 'Passwords do not match';
+        } else {
+            // Retrieve the current date
+            $registrationDate = date('Y-m-d');
+
+            // Perform database insertion
+            $sql = "INSERT INTO student (first_name, last_name, birthday, gender, email, phone_number, subject, role_id, registration_date, username, password)
+                    VALUES (:firstName, :lastName, :birthdayDate, :gender, :emailAddress, :phoneNumber, :subject, :roleId, :registrationDate, :username, :password)";
+            
+            $query = $dbh->prepare($sql);
+            $query->bindParam(':firstName', $firstName, PDO::PARAM_STR);
+            $query->bindParam(':lastName', $lastName, PDO::PARAM_STR);
+            $query->bindParam(':birthdayDate', $birthdayDate, PDO::PARAM_STR);
+            $query->bindParam(':gender', $gender, PDO::PARAM_STR);
+            $query->bindParam(':emailAddress', $emailAddress, PDO::PARAM_STR);
+            $query->bindParam(':phoneNumber', $phoneNumber, PDO::PARAM_STR);
+            $query->bindParam(':subject', $subject, PDO::PARAM_STR);
+            $query->bindParam(':roleId', $roleId, PDO::PARAM_INT);
+            $query->bindParam(':registrationDate', $registrationDate, PDO::PARAM_STR);
+            $query->bindParam(':username', $username, PDO::PARAM_STR);
+            $query->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+            $query->execute();
+            $lastInsertId = $dbh->lastInsertId();
+            if($lastInsertId) {
+                $msg = "Student info added successfully";
+            } else {
+                $error = "Something went wrong. Please try again";
+            }
+        }
+    }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -98,7 +117,7 @@ $error="Something went wrong. Please try again";
                                         <div class="panel">
                                             <div class="panel-heading">
                                                 <div class="panel-title">
-                                                    <h5>Fill the Student info</h5>
+                                                    <h5>Fill the Student infomation</h5>
                                                 </div>
                                             </div>
                                             <div class="panel-body">
@@ -111,71 +130,83 @@ else if($error){?>
                                             <strong>Oh snap!</strong> <?php echo htmlentities($error); ?>
                                         </div>
                                         <?php } ?>
-                                                <form class="form-horizontal" method="post">
-
-<div class="form-group">
-<label for="default" class="col-sm-2 control-label">Full Name</label>
-<div class="col-sm-10">
-<input type="text" name="fullanme" class="form-control" id="fullanme" required="required" autocomplete="off">
-</div>
-</div>
-
-<div class="form-group">
-<label for="default" class="col-sm-2 control-label">Roll Id</label>
-<div class="col-sm-10">
-<input type="text" name="rollid" class="form-control" id="rollid" maxlength="5" required="required" autocomplete="off">
-</div>
-</div>
-
-<div class="form-group">
-<label for="default" class="col-sm-2 control-label">Email id</label>
-<div class="col-sm-10">
-<input type="email" name="emailid" class="form-control" id="email" required="required" autocomplete="off">
-</div>
-</div>
-
-
-
-<div class="form-group">
-<label for="default" class="col-sm-2 control-label">Gender</label>
-<div class="col-sm-10">
-<input type="radio" name="gender" value="Male" required="required" checked="">Male <input type="radio" name="gender" value="Female" required="required">Female <input type="radio" name="gender" value="Other" required="required">Other
-</div>
-</div>
-
-
-
-
-
-
-
-
-
-
-                                                    <div class="form-group">
-                                                        <label for="default" class="col-sm-2 control-label">Class</label>
-                                                        <div class="col-sm-10">
- <select name="class" class="form-control" id="default" required="required">
-<option value="">Select Class</option>
-<?php $sql = "SELECT * from tblclasses";
-$query = $dbh->prepare($sql);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
-if($query->rowCount() > 0)
-{
-foreach($results as $result)
-{   ?>
-<option value="<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->ClassName); ?>&nbsp; Section-<?php echo htmlentities($result->Section); ?></option>
-<?php }} ?>
- </select>
-                                                        </div>
-                                                    </div>
-<div class="form-group">
-                                                        <label for="date" class="col-sm-2 control-label">DOB</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="date"  name="dob" class="form-control" id="date">
-                                                        </div>
-                                                    </div>
+                                        <div class="panel-body p-50">
+                                                <section class="vh-100 gradient-custom">
+                                                    <div class="container py-5 h-100">
+                                                        <div class="row justify-content-center align-items-center h-100">
+                                                            <div class="col-12">
+                                                                <form class="form-horizontal" method="post">
+                                                                    <div class="form-group">
+                                                                        <label for="firstName" class="col-sm-2 control-label">First Name</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="lastName" class="col-sm-2 control-label">Last Name</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter Last Name" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="roleId" class="col-sm-2 control-label">Role ID</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="roleId" name="roleId" placeholder="Enter Role ID" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="birthdayDate" class="col-sm-2 control-label">Birthdate</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="date" class="form-control" id="birthdayDate" name="birthdayDate" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="gender" class="col-sm-2 control-label">Gender</label>
+                                                                        <div class="col-sm-10">
+                                                                            <select class="form-control" id="gender" name="gender" required>
+                                                                                <option value="">Select Gender</option>
+                                                                                <option value="Male">Male</option>
+                                                                                <option value="Female">Female</option>
+                                                                                <option value="Other">Other</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="emailAddress" class="col-sm-2 control-label">Email</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="email" class="form-control" id="emailAddress" name="emailAddress" placeholder="Enter Email" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="username" class="col-sm-2 control-label">Username</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="password" class="col-sm-2 control-label">Password</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="confirmPassword" class="col-sm-2 control-label">Confirm Password</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="password" class="form-control" id="confirmPassword" name="confirm_password" placeholder="Confirm Password" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="phoneNumber" class="col-sm-2 control-label">Phone Number</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="subject" class="col-sm-2 control-label">Subject</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter Subject" required>
+                                                                        </div>
+                                                                    </div>
                                                     
 
                                                     
@@ -219,4 +250,4 @@ foreach($results as $result)
         </script>
     </body>
 </html>
-<?PHP } ?>
+        

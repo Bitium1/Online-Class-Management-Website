@@ -142,33 +142,7 @@ foreach($results as $result)
                                                     </div>
                                                     
                                                     <form class="form-horizontal" method="post">
-                                                    <div class="form-group">
-                                                        <label for="default" class="col-sm-2 control-label">Title</label>
-                                                        <div class="col-sm-10">
- <input type="text" name="subjectname" class="form-control" id="default" placeholder="Video Title" required="required">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="default" class="col-sm-2 control-label">Description</label>
-                                                        <div class="col-sm-10">
- <input type="text" name="subjectname" class="form-control" id="default" placeholder="Video Description" required="required">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="default" class="col-sm-2 control-label">Thumbnail</label>
-                                                        <div class="col-sm-10">
-                                                        <input type="file" name="thumb" accept="image/*" required class="box">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="default" class="col-sm-2 control-label">Select Video</label>
-                                                        <div class="col-sm-10">
-                                                        <input type="file" name="video" accept="video/*" required class="box">
-                                                        </div>
-                                                    </div>
-
+                                                   
       
                                                     <div class="form-group">
                                                         <div class="col-sm-offset-2 col-sm-10">
