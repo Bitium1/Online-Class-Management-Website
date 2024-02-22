@@ -169,14 +169,14 @@ if($query->rowCount() > 0)
 {
 foreach($results as $result)
 {   ?>
-<option value="<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->ClassName); ?>&nbsp; Section-<?php echo htmlentities($result->Section); ?></option>
+<option value="<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->SubjectName); ?>&nbsp; Section-<?php echo htmlentities($result->Section); ?></option>
 <?php }} ?>
  </select>          
          
              
              
 <label for="message">Enter your message</label>         
-<textarea name="msg" class="box" placeholder="enter your message here" required cols="30" rows="10" maxlength="1000"></textarea>
+<textarea name="msg" class="box" placeholder="enter your message here" required cols="100" rows="10" maxlength="1000"></textarea>
               
 <button type="submit" class="btn btn-success btn-labeled pull-right">send<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span></button>
               
