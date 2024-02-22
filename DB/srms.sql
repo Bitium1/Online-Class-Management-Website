@@ -109,8 +109,6 @@ CREATE TABLE `tblsubjectcombination` (
 
 -- --------------------------------------------------------
 
-<<<<<<< HEAD
-=======
 -- Table structure for table `VIDEO`
 CREATE TABLE `video` (
    `id` int(11) NOT NULL,
@@ -125,7 +123,6 @@ CREATE TABLE `video` (
   `Updationdate` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
  -- --------------------------------------------------------
->>>>>>> origin/Aisha
 --
 -- Table structure for table `tblsubjects`
 --
@@ -212,14 +209,11 @@ ALTER TABLE `tblstudents`
 ALTER TABLE `tblsubjectcombination`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
-<<<<<<< HEAD
-=======
 ---- AUTO_INCREMENT for table `VIDEO`
 --
 ALTER TABLE `video`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
   
->>>>>>> origin/Aisha
 --
 -- AUTO_INCREMENT for table `tblsubjects`
 --
@@ -242,6 +236,8 @@ CREATE TABLE student (
     username VARCHAR(255),
     password VARCHAR(255)
 );
+
+ALTER TABLE admin RENAME TO teacher;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

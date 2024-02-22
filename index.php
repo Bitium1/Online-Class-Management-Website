@@ -155,7 +155,7 @@ echo "<script type='text/javascript'> document.location = 'dashboard.php'; </scr
                                                     			<button type="submit" name="login" class="btn btn-success btn-labeled pull-right">Sign in<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span></button>
                                                     		</div>
                                                     	</div>
-                                                        <p class="link">don't have an account? <a href="Student/register.php">register now</a></p>
+                                                        <p class="link">don't have an account? <a href="register.php">register now</a></p>
 
 
                                                     </form>
