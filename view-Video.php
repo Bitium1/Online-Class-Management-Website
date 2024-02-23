@@ -1,10 +1,10 @@
 <?php
 session_start();
-
 include('includes/config.php');
 
 if(strlen($_SESSION['alogin']) == "") {   
     header("Location: index.php"); 
+    exit(); // Add exit() after header to stop further execution
 } else {
     // Handle form submission if needed
 }
@@ -58,7 +58,8 @@ $videos = $query->fetchAll(PDO::FETCH_ASSOC);
                                         <!-- Display videos dynamically -->
                                         <?php foreach ($videos as $video): ?>
                                             <video width="320" height="190" controls>
-                                            <source src="view_video.php?id=<?php echo $video['id']; ?>" type="video/mp4">
+                                                <source src="view_video.php?id=<?php echo $video['id']; ?>" type="video/mp4">
+                                                Your browser does not support the video tag.
                                             </video>
                                         <?php endforeach; ?>
                                     </div>

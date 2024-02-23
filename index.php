@@ -95,7 +95,7 @@ else if($_POST['form_name'] === 'student'){
                                             <div class="panel">
                                                 <div class="panel-heading">
                                                     <div class="panel-title text-center">
-                                                        <h4>Students Login</h4>
+                                                        <h4>Student Login</h4>
                                                     </div>
                                                 </div>
                                                 <div class="panel-body p-20">
@@ -112,7 +112,7 @@ else if($_POST['form_name'] === 'student'){
                                                     	<div class="form-group">
                                                     		<label for="username" class="col-sm-2 control-label">Username</label>
                                                     		<div class="col-sm-10">
-                                                    			<input type="text" name="username" class="form-control" id="username" name="username" required>
+                                                    			<input type="text" name="username" class="form-control" id="username" placeholder="User Name" name="username" required>
                                                     		</div>
                                                     	</div>
                                                     	<div class="form-group">
@@ -130,8 +130,6 @@ else if($_POST['form_name'] === 'student'){
                                                     	</div>
                                                     </form>
 
-
-                                                    <p class="link">student login <a href="Student/s-dashboard.php">student login</a></p>
 
 
 
@@ -164,7 +162,7 @@ else if($_POST['form_name'] === 'student'){
                                             <div class="panel">
                                                 <div class="panel-heading">
                                                     <div class="panel-title text-center">
-                                                        <h4>Admin Login</h4>
+                                                        <h4>Teacher Login</h4>
                                                     </div>
                                                 </div>
                                                 <div class="panel-body p-20">
@@ -181,7 +179,7 @@ else if($_POST['form_name'] === 'student'){
                                                     	<div class="form-group">
                                                     		<label for="username" class="col-sm-2 control-label">Username</label>
                                                     		<div class="col-sm-10">
-                                                    			<input type="text" name="username" class="form-control" id="username" name="username" required>
+                                                    			<input type="text" name="username" class="form-control" id="username" placeholder="User Name" name="username" required>
                                                     		</div>
                                                     	</div>
                                                     	<div class="form-group">
@@ -208,7 +206,7 @@ else if($_POST['form_name'] === 'student'){
                                                 </div>
                                             </div>
                                             <!-- /.panel -->
-                                            <p class="text-muted text-center"><small>Copyright @Bitium  </a></small> </p>
+                                            
                                         </div>
                                         <!-- /.col-md-11 -->
                                     </div>
@@ -218,7 +216,7 @@ else if($_POST['form_name'] === 'student'){
                             </div>
                             <!-- /.row -->
                         </section>
-
+                        
                     </div>
                     <!-- /.col-md-6 -->
                 </div>
@@ -227,6 +225,7 @@ else if($_POST['form_name'] === 'student'){
             <!-- /. -->
 
         </div>
+        <p class="text-muted text-center"><small>Copyright @Bitium  </a></small> </p>
         <!-- /.main-wrapper -->
 
         <!-- ========== COMMON JS FILES ========== -->

@@ -49,10 +49,10 @@
                                         </ul>
                                         
 <li class="has-children">
-                                        <a href="#"><i class="fa fa-file-text"></i> <span>Contact us</span> <i class="fa fa-angle-right arrow"></i></a>
+                                        <a href="#"><i class="fa fa-file-text"></i> <span>get in touch</span> <i class="fa fa-angle-right arrow"></i></a>
                                         <ul class="child-nav">
 
-                                            <li><a href="contact_us.php"><i class="fa fa-newspaper-o"></i> <span>Contact us</span></a></li>
+                                            <li><a href="get in touch.php"><i class="fa fa-newspaper-o"></i> <span>get in touch</span></a></li>
                                            
                                            
                                         </ul>

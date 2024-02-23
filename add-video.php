@@ -3,6 +3,9 @@ session_start();
 
 include('includes/config.php');
 
+$msg = ""; // Initialize the variable $msg
+$error = ""; // Initialize the variable $error
+
 if(strlen($_SESSION['alogin']) == "") {   
     header("Location: index.php"); 
 } else {
