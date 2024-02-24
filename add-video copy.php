@@ -1,50 +1,44 @@
 <?php
 session_start();
+
 include('includes/config.php');
 
 $msg = ""; // Initialize the variable $msg
 $error = ""; // Initialize the variable $error
 
-if(strlen($_SESSION['alogin'])=="") {   
+if(strlen($_SESSION['alogin']) == "") {   
     header("Location: index.php"); 
 } else {
     if(isset($_POST['submit'])) {
-        
+        $class = $_POST['class'];
+        $subject = $_POST['subject']; 
         $title = $_POST['title']; 
         $description = $_POST['description']; 
-        $subject = $_POST['subject'];
-        $class = $_POST['class'];
+        $status = 1;
+
+        // Handling thumbnail upload
         $thumbnail = $_FILES['thumbnail']['name'];
-        $thumbnail = filter_var($thumbnail, FILTER_SANITIZE_STRING);
-        $thumb_ext = pathinfo($thumbnail, PATHINFO_EXTENSION);
-        $rename_thumb = uniqid().'.'.$thumb_ext;
-        $thumb_size = $_FILES['thumbnail']['size'];
-        $thumb_tmp_name = $_FILES['thumbnail']['tmp_name'];
-        $thumb_folder = 'uploaded_files/'.$rename_thumb;
+        move_uploaded_file($_FILES['thumbnail']['tmp_name'], "thumbnails/".$thumbnail);
 
+        // Handling video upload
         $video = $_FILES['video']['name'];
-        $video = filter_var($video, FILTER_SANITIZE_STRING);
-        $video_ext = pathinfo($video, PATHINFO_EXTENSION);
-        $rename_video = uniqid().'.'.$video_ext;
-        $video_tmp_name = $_FILES['video']['tmp_name'];
-        $video_folder = 'uploaded_files/'.$rename_video;
+        move_uploaded_file($_FILES['video']['tmp_name'], "video/".$video);
 
-        $sql = "INSERT INTO video(ClassId, SubjectId, title, thumbnail, description, video) 
-                VALUES(:class, :subject, :title, :thumbnail, :description, :video)";
-                move_uploaded_file($thumb_tmp_name, $thumb_folder);
-                move_uploaded_file($video_tmp_name, $video_folder);
+        $sql = "INSERT INTO video(ClassId, SubjectId, title, thumbnail, description, video, status) 
+                VALUES(:class, :subject, :title, :thumbnail, :description, :video, :status)";
         $query = $dbh->prepare($sql);
-        $query->bindParam(':title', $title, PDO::PARAM_STR);
-        $query->bindParam(':thumbnail',$rename_thumb, PDO::PARAM_STR);
-        $query->bindParam(':description', $description, PDO::PARAM_STR);
-        $query->bindParam(':video',$rename_video, PDO::PARAM_STR);
         $query->bindParam(':class', $class, PDO::PARAM_STR);
         $query->bindParam(':subject', $subject, PDO::PARAM_STR);
+        $query->bindParam(':status', $status, PDO::PARAM_STR);
+        $query->bindParam(':title', $title, PDO::PARAM_STR);
+        $query->bindParam(':thumbnail', $thumbnail, PDO::PARAM_STR);
+        $query->bindParam(':description', $description, PDO::PARAM_STR);
+        $query->bindParam(':video', $video, PDO::PARAM_STR);
         $query->execute();
         $lastInsertId = $dbh->lastInsertId();
         
         if($lastInsertId) {
-            $msg = "New video uploaded!";
+            $msg = "Combination added successfully";
         } else {
             $error = "Something went wrong. Please try again";
         }
@@ -156,8 +150,6 @@ if(strlen($_SESSION['alogin'])=="") {
                                                     </select>
                                                 </div>
                                             </div>
-                                            
-                                                
                                             <div class="form-group">
                                                 <label for="default" class="col-sm-2 control-label">Title</label>
                                                 <div class="col-sm-10">

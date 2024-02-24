@@ -1,26 +1,35 @@
 <?php
+session_start();
+
 include('includes/config.php');
 
-if (strlen($_SESSION['alogin']) == "") {
-    header("Location: index.php");
+if(strlen($_SESSION['alogin']) == "") {   
+    header("Location: index.php"); 
 } else {
-    if (isset($_POST['submit'])) {
-        $studentId = $_POST['studentId'];
-        $firstName = $_POST['firstName'];
-        $lastName = $_POST['lastName'];
-        $birthdayDate = $_POST['birthdayDate'];
-        $gender = $_POST['gender'];
-        $emailAddress = $_POST['emailAddress'];
-        $phoneNumber = $_POST['phoneNumber'];
-        $subject = $_POST['subject'];
-        $roleId = $_POST['roleId'];
-        $username = $_POST['username'];
+    if(isset($_POST['Update'])) {
+        
+            // Get form data
+            $studentId = intval($_GET['studentId']);
+            $firstName = isset($_POST['firstName']) ? $_POST['firstName'] : "";
+            $lastName = isset($_POST['lastName']) ? $_POST['lastName'] : "";
+            $birthdayDate = isset($_POST['birthdayDate']) ? $_POST['birthdayDate'] : "";
+            $gender = isset($_POST['gender']) ? $_POST['gender'] : "";
+            $emailAddress = isset($_POST['emailAddress']) ? $_POST['emailAddress'] : "";
+            $phoneNumber = isset($_POST['phoneNumber']) ? $_POST['phoneNumber'] : "";
+            $subject = isset($_POST['subject']) ? $_POST['subject'] : "";
+            $roleId = isset($_POST['roleId']) ? $_POST['roleId'] : "";
 
-        // Validate form inputs
-        if (empty($firstName) || empty($lastName) || empty($birthdayDate) || empty($gender) || empty($emailAddress) || empty($phoneNumber) || empty($subject) || empty($roleId) || empty($username)) {
-            $error = 'Please fill all the fields';
-        } else {
-            $sql = "UPDATE student SET first_name = :firstName, last_name = :lastName, birthday = :birthdayDate, gender = :gender, email = :emailAddress, phone_number = :phoneNumber, subject = :subject, role_id = :roleId, username = :username WHERE id = :studentId";
+            // Update student information query
+            $sql = "UPDATE student 
+                    SET first_name = :firstName, 
+                        last_name = :lastName, 
+                        birthday = :birthdayDate, 
+                        gender = :gender, 
+                        email = :emailAddress, 
+                        phone_number = :phoneNumber, 
+                        subject = :subject, 
+                        role_id = :roleId 
+                    WHERE id = :studentId";
 
             // Prepare and execute the SQL statement
             $query = $dbh->prepare($sql);
@@ -33,19 +42,10 @@ if (strlen($_SESSION['alogin']) == "") {
             $query->bindParam(':phoneNumber', $phoneNumber, PDO::PARAM_STR);
             $query->bindParam(':subject', $subject, PDO::PARAM_STR);
             $query->bindParam(':roleId', $roleId, PDO::PARAM_INT);
-            $query->bindParam(':username', $username, PDO::PARAM_STR);
             $query->execute();
 
-            // Check if the query was successful
-            $rowCount = $query->rowCount();
-            if ($rowCount > 0) {
-                $msg = "Student info updated successfully";
-            } else {
-                $error = "Failed to update student info";
-            }
-        }
+            $msg="Subject Info updated successfully";
     }
-}
 ?>
 
 <!DOCTYPE html>
@@ -85,7 +85,7 @@ if (strlen($_SESSION['alogin']) == "") {
                             <div class="col-md-6">
                                 <ul class="breadcrumb">
                                     <li><a href="dashboard.php"><i class="fa fa-home"></i> Home</a></li>
-                                    <li>Edit Student</li>
+                                    <li>Update Student</li>
                                 </ul>
                             </div>
                         </div>
@@ -96,44 +96,55 @@ if (strlen($_SESSION['alogin']) == "") {
                                 <div class="panel">
                                     <div class="panel-heading">
                                         <div class="panel-title">
-                                            <h5>Edit Student Information</h5>
+                                            <h5>Update Student Information</h5>
                                         </div>
                                     </div>
                                     <div class="panel-body">
-                                        <?php if(isset($msg)): ?>
-                                            <div class="alert alert-success left-icon-alert" role="alert">
-                                                <strong>Well done!</strong> <?php echo htmlentities($msg); ?>
-                                            </div>
-                                        <?php elseif(isset($error)): ?>
-                                            <div class="alert alert-danger left-icon-alert" role="alert">
-                                                <strong>Oh snap!</strong> <?php echo htmlentities($error); ?>
-                                            </div>
-                                        <?php endif; ?>
-                                        <form class="form-horizontal" method="post" action="">
-                                            <!-- Add hidden input for student ID -->
-                                            <input type="hidden" name="studentId" value="<?php echo $studentId; ?>">
+                                    <?php if($msg){?>
+<div class="alert alert-success left-icon-alert" role="alert">
+ <strong>Well done!</strong><?php echo htmlentities($msg); ?>
+ </div><?php } 
+else if($error){?>
+    <div class="alert alert-danger left-icon-alert" role="alert">
+                                            <strong>Oh snap!</strong> <?php echo htmlentities($error); ?>
+                                        </div>
+                                        <?php } ?>
+                                        <form class="form-horizontal" method="post">
+                                        <?php
+                                        $studentId=intval($_GET['studentId']);
+                                        $sql = "SELECT * from student where id=:studentId";
+                                        $query = $dbh->prepare($sql);
+                                        $query->bindParam(':studentId',$studentId,PDO::PARAM_STR);
+                                        $query->execute();
+                                        $results=$query->fetchAll(PDO::FETCH_OBJ);
+                                        $cnt=1;
+                                        if($query->rowCount() > 0)
+                                        {
+                                            foreach($results as $result)
+                                            {   
+                                        ?>              
                                             <div class="form-group">
                                                 <label for="firstName" class="col-sm-2 control-label">First Name</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name" required>
+                                                    <input type="text" class="form-control" value="<?php echo htmlentities($result->first_name);?>" id="firstName" name="firstName" placeholder="Enter First Name" required>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="lastName" class="col-sm-2 control-label">Last Name</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter Last Name" required>
+                                                    <input type="text" class="form-control" value="<?php echo htmlentities($result->last_name);?>" id="lastName" name="lastName" placeholder="Enter Last Name" required>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="roleId" class="col-sm-2 control-label">Role ID</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="roleId" name="roleId" placeholder="Enter Role ID" required>
+                                                    <input type="text" class="form-control" value="<?php echo htmlentities($result->role_id);?>" id="roleId" name="roleId" placeholder="Enter Role ID" required>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="birthdayDate" class="col-sm-2 control-label">Birthdate</label>
                                                 <div class="col-sm-10">
-                                                    <input type="date" class="form-control" id="birthdayDate" name="birthdayDate" required>
+                                                    <input type="date" class="form-control" value="<?php echo htmlentities($result->birthday);?>" id="birthdayDate" name="birthdayDate" required>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -141,39 +152,35 @@ if (strlen($_SESSION['alogin']) == "") {
                                                 <div class="col-sm-10">
                                                     <select class="form-control" id="gender" name="gender" required>
                                                         <option value="">Select Gender</option>
-                                                        <option value="Male">Male</option>
-                                                        <option value="Female">Female</option>
-                                                        <option value="Other">Other</option>
+                                                        <option value="Male" <?php if($result->gender=="Male") echo "selected"; ?>>Male</option>
+                                                        <option value="Female" <?php if($result->gender=="Female") echo "selected"; ?>>Female</option>
+                                                        <option value="Other" <?php if($result->gender=="Other") echo "selected"; ?>>Other</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="emailAddress" class="col-sm-2 control-label">Email</label>
                                                 <div class="col-sm-10">
-                                                    <input type="email" class="form-control" id="emailAddress" name="emailAddress" placeholder="Enter Email" required>
+                                                    <input type="email" class="form-control" value="<?php echo htmlentities($result->email);?>" id="emailAddress" name="emailAddress" placeholder="Enter Email" required>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="username" class="col-sm-2 control-label">Username</label>
-                                                <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" required>
-                                                </div>
-                                            </div>
+                                            
                                             <div class="form-group">
                                                 <label for="phoneNumber" class="col-sm-2 control-label">Phone Number</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" required>
+                                                    <input type="text" class="form-control" value="<?php echo htmlentities($result->phone_number);?>" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" required>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="subject" class="col-sm-2 control-label">Subject</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter Subject" required>
+                                                    <input type="text" class="form-control" value="<?php echo htmlentities($result->subject);?>" id="subject" name="subject" placeholder="Enter Subject" required>
                                                 </div>
                                             </div>
+                                        <?php }} ?>
                                             <div class="form-group">
                                                 <div class="col-sm-offset-2 col-sm-10">
-                                                    <button type="submit" name="submit" class="btn btn-primary">Update</button>
+                                                    <button type="submit" name="Update" class="btn btn-primary">Update</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -207,3 +214,5 @@ if (strlen($_SESSION['alogin']) == "") {
     </script>
 </body>
 </html>
+
+<?PHP } ?>
