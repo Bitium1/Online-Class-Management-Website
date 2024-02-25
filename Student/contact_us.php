@@ -62,6 +62,14 @@ if(isset($_POST['submit']))
     -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
     box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
 }
+.box{
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+   
+}
+.container {
+  padding: 2px 16px;
+}
 .succWrap{
     padding: 10px;
     margin: 0 0 20px 0;

@@ -185,6 +185,10 @@ ALTER TABLE `tblsubjectcombination`
 ALTER TABLE `tblsubjects`
   ADD PRIMARY KEY (`id`);
 
+
+
+ALTER TABLE `contact`
+  ADD PRIMARY KEY (`roll_id`);
 --
 -- AUTO_INCREMENT for dumped tables
 --
@@ -224,6 +228,11 @@ ALTER TABLE `tblsubjectcombination`
 ALTER TABLE `video`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
   
+
+--- AUTO_INCREMENT for table `contact`
+--
+ALTER TABLE `contact`
+  MODIFY `roll_id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tblsubjects`
 --
