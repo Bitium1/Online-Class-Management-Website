@@ -64,6 +64,10 @@
                                             <li><a href="manage-results.php"><i class="fa fa fa-server"></i> <span>Manage Result</span></a></li>
                                            
                                         </ul>
+                                        <li><a href="student_comments.php"><i class="fa fa fa-server"></i> <span>Student comments</span></a></li>
+                                           
+                                           </li>
+
                                         <li><a href="change-password.php"><i class="fa fa fa-server"></i> <span>Change Password</span></a></li>
                                            
                                     </li>
