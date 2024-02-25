@@ -6,14 +6,24 @@ if(strlen($_SESSION['alogin']) == "") {
     header("Location: index.php"); 
     exit(); // Add exit() after header to stop further execution
 } else {
-    // Handle form submission if needed
+    if(isset($_POST['delete_video'])){
+      
+        $delete_id = $_POST['video_id'];
+        $delete_id = filter_var($delete_id, FILTER_SANITIZE_STRING);
+        $verify_video = $dbh->prepare("SELECT * FROM `video` WHERE id = ? LIMIT 1");
+        $verify_video->execute([$delete_id]);
+        if($verify_video->rowCount() > 0){
+           $fetch_thumb = $verify_video->fetch(PDO::FETCH_ASSOC);
+           unlink('uploaded_files/'.$fetch_thumb['thumbnail']);
+           unlink('uploaded_files/'.$fetch_thumb['video']);
+           $delete_content = $dbh->prepare("DELETE FROM `video` WHERE id = ?");
+           $delete_content->execute([$delete_id]);
+           $message[] = 'Video deleted!';
+        } else {
+           $message[] = 'Video already deleted!';
+        }
+    }
 }
-
-// Fetch video details from the database
-$sql = "SELECT * FROM video";
-$query = $dbh->prepare($sql);
-$query->execute();
-$videos = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +31,12 @@ $videos = $query->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
     <title>View Video</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="stylesheet" href="css/admin_style.css">
     <link rel="stylesheet" href="css/bootstrap.min.css" media="screen" >
     <link rel="stylesheet" href="css/font-awesome.min.css" media="screen" >
     <link rel="stylesheet" href="css/animate-css/animate.min.css" media="screen" >
@@ -51,18 +66,52 @@ $videos = $query->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="panel">
                                     <div class="panel-heading">
                                         <div class="panel-title">
-                                            <h5>View Video</h5>
+                                            <h3>View Video</h3>
                                         </div>
-                                    </div>
-                                    <div class="panel-body">
-                                        <!-- Display videos dynamically -->
-                                        <?php foreach ($videos as $video): ?>
-                                            <video width="320" height="190" controls>
-                                                <source src="view_video.php?id=<?php echo $video['id']; ?>" type="video/mp4">
-                                                Your browser does not support the video tag.
-                                            </video>
-                                        <?php endforeach; ?>
-                                    </div>
+
+                                   
+                                        
+                                        <div class="panel-body">
+    <div class="row">
+        <?php
+        $select_videos = $dbh->prepare("SELECT * FROM `video` ORDER BY Updationdate DESC");
+        $select_videos->execute();
+        if($select_videos->rowCount() > 0) {
+            while($fetch_videos = $select_videos->fetch(PDO::FETCH_ASSOC)) { 
+                $video_id = $fetch_videos['id'];
+        ?>
+
+        <div class="col-md-3">
+            <div class="w3-card-4 w3-dark-grey" style="margin-bottom: 20px;">
+
+                <div class="w3-container w3-center">
+                    <h6 class="title"><?= $fetch_videos['title']; ?></h6>
+                    <img src="uploaded_files/<?= $fetch_videos['thumbnail']; ?>" class="thumbnail" width=98% height=150px alt="">
+                    <h6 class="card-subtitle mb-2 "><?= $fetch_videos['Updationdate']; ?></h6>
+                    <p class="card-text"><?= $fetch_videos['description']; ?></p>
+
+                    <div class="w3-section">
+                        <form action="" method="post" class="flex-btn">
+                            <input type="hidden" name="video_id" value="<?= $video_id; ?>">
+                            <a href="update_content.php?get_id=<?= $video_id; ?>" class="w3-button w3-gray btn-custom">Update</a>
+                            <a href="view_content.php?get_id=<?= $video_id; ?>" class="w3-button w3-gray btn-custom" >View Content</a>
+                            <input type="submit"  value="Delete" class="w3-button w3-gray btn-custom" onclick="return confirm('Delete this video?');" name="delete_video">
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+            }
+        }
+        ?>
+    </div>
+</div>
+
+</div>
+
+
                                 </div>
                             </div>
                         </div>
