@@ -1,6 +1,4 @@
-:root {
-    --gradient: linear-gradient(to left top, #cfcccd 10%, #1b1918 90%) !important;
-  }
+
   
   
   
@@ -14,7 +12,7 @@
   .btn {
     border: 5px solid;
     border-image-slice: 1;
-    background: var(--gradient) !important;
+    background: gray !important;
     -webkit-background-clip: gray!important;
     -webkit-text-fill-color:#fff  !important;
     border-image-source:  transparent !important; 
@@ -23,7 +21,7 @@
   }
   
   .btn:hover, .btn:focus {
-        background: var(--gradient) !important;
+        background: gray !important;
     -webkit-background-clip: none !important;
     -webkit-text-fill-color: #fff !important;
     border: 5px solid #fff !important; 
@@ -33,4 +31,15 @@
 
  .title {
     color: #fff;
+   
   }
+  .card-body{
+    line-height: 0.8;
+  }
+
+  .btn-custom {
+    width: 93px; 
+    margin: 10px 10px;
+    font-size: 11px;
+    padding: 10px;
+}

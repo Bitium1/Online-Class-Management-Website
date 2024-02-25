@@ -96,7 +96,7 @@ if(strlen($_SESSION['alogin']) == "") {
                                                         <th>Email</th>
                                                         <th>Phone No.</th>
                                                         <th>Roll Id</th>
-                                                        <th>Class</th>
+                                                        <th>Subject</th>
                                                         <th>Reg Date</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
@@ -112,7 +112,7 @@ if(strlen($_SESSION['alogin']) == "") {
                                                         <th>Email</th>
                                                         <th>Phone No.</th>
                                                         <th>Roll Id</th>
-                                                        <th>Class</th>
+                                                        <th>Subject</th>
                                                         <th>Reg Date</th>
                                                         <th>Status</th>
                                                         <th>Action</th>
@@ -137,11 +137,11 @@ if(strlen($_SESSION['alogin']) == "") {
                                                             <td><?php echo htmlentities($result->email);?></td>
                                                             <td><?php echo htmlentities($result->phone_number);?></td>
                                                             <td><?php echo htmlentities($result->role_id);?></td>
-                                                            <td><?php echo htmlentities($result->ClassId);?></td>
+                                                            <td><?php echo htmlentities($result->subject);?></td>
                                                             <td><?php echo htmlentities($result->registration_date);?></td>
                                                             <td><?php echo ($result->Status == 1) ? 'Active' : 'Blocked';?></td>
                                                             <td>
-                                                                <a href="edit-student.php?stid=<?php echo htmlentities($result->StudentId);?>"><i class="fa fa-edit" title="Edit Record"></i></a> 
+                                                                <a href="edit-student.php?studentId=<?php echo htmlentities($result->StudentId);?>"><i class="fa fa-edit" title="Edit Record"></i></a> 
                                                             </td>
                                                         </tr>
                                                         <?php $cnt=$cnt+1;
