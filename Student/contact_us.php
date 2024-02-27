@@ -12,29 +12,35 @@ if(isset($_POST['submit']))
     $roll_id=$_POST['roll_id'];
     $name=$_POST['name']; 
     $email=$_POST['email'];
-    $class=$_POST['class'];  
     $subject=$_POST['subject']; 
+    $class=$_POST['class'];  
+    
     $msg=$_POST['msg']; 
-    $sql="INSERT INTO  contact(roll_id,name, email, class, subject, msg) VALUES(:roll_id,:name,:email,:class,:subject,:msg)";
+    $sql = "INSERT INTO contact (roll_id, name, email, subject,class, msg) VALUES (:roll_id, :name, :email,  :subject,:class, :msg)";
+
     $query = $dbh->prepare($sql);
     $query->bindParam(':roll_id',$roll_id,PDO::PARAM_INT);
     $query->bindParam(':name',$name,PDO::PARAM_STR);
     $query->bindParam(':email',$email,PDO::PARAM_STR);
-    $query->bindParam(':class',$class,PDO::PARAM_STR);
     $query->bindParam(':subject',$subject,PDO::PARAM_STR);
+    $query->bindParam(':class',$class,PDO::PARAM_STR);
     $query->bindParam(':msg',$msg,PDO::PARAM_STR);
-    $query->execute();
-    $lastInsertId = $dbh->lastInsertId();
-    if($lastInsertId)
-    {
-    $msg="message sent successfully";
+
+
+    try {
+        // ... (your existing code)
+        $query->execute();
+        $lastInsertId = $dbh->lastInsertId();
+        if ($lastInsertId) {
+            $msg = "Message sent successfully";
+        } else {
+            $error = "Something went wrong. Please try again";
+        }
+    } catch (PDOException $e) {
+        $error = "Database error: " . $e->getMessage();
     }
-    else 
-    {
-    $error="Something went wrong. Please try again";
-    }
+}    
     
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,13 +68,54 @@ if(isset($_POST['submit']))
     -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
     box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
 }
-.box{
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-   
+
+ .box-container{
+   margin-top: 3rem;
+   display: flex;
+   align-items: flex-start;
+   gap: 1.5rem;
+   flex-wrap: wrap;
 }
-.container {
-  padding: 2px 16px;
+
+.box-container .box{
+   flex: 1 1 30rem;
+   border-radius: .5rem;
+   background-color: var(--white);
+   padding: 2rem;
+   text-align: center;
+}
+
+ .box-container .box i{
+   font-size: 3rem;
+   color: var(--main-color);
+   margin-bottom: 1rem;
+}
+
+ .box-container .box h4{
+   margin: 1.5rem 0;
+   font-size: 2rem;
+   color: var(--black);
+}
+
+ .box-container .box a{
+   display: block;
+   font-size: 1.2rem;
+   color: black;
+   line-height: 1.5;
+   margin-top: .5rem;
+}
+
+ .box-container .box a:hover{
+   text-decoration: underline;
+   color: blue;
+}
+ .image{
+   flex: 1 1 50rem;
+}
+
+.image img{
+   height: 50rem;
+   width: 100%;
 }
 .succWrap{
     padding: 10px;
@@ -148,6 +195,23 @@ else if($error){?>
           <input type="text" class="form-control" id="name" placeholder="Enter Your name" autocomplete="off" name="name">
           <label for="email">Enter your Email</label>
           <input type="text" class="form-control" id="email" placeholder="Enter Your Email" autocomplete="off" name="email">
+          
+          <label for="subject">Enter your subject</label>
+          
+          <select name="subject" class="form-control" id="default" required="required">
+<option value="">Select subject</option>
+<?php $sql = "SELECT * from tblsubjects";
+$query = $dbh->prepare($sql);
+$query->execute();
+$results=$query->fetchAll(PDO::FETCH_OBJ);
+if($query->rowCount() > 0)
+{
+foreach($results as $result)
+{   ?>
+<option value="<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->SubjectName); ?>&nbsp; Section-<?php echo htmlentities($result->Section); ?></option>
+<?php }} ?>
+ </select>      
+          
           <label for="class">Enter your Class</label>
          
 
@@ -164,21 +228,7 @@ foreach($results as $result)
 <option value="<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->ClassName); ?>&nbsp; Section-<?php echo htmlentities($result->Section); ?></option>
 <?php }} ?>
  </select>
-          <label for="subject">Enter your subject</label>
-          
-          <select name="subject" class="form-control" id="default" required="required">
-<option value="">Select subject</option>
-<?php $sql = "SELECT * from tblsubjects";
-$query = $dbh->prepare($sql);
-$query->execute();
-$results=$query->fetchAll(PDO::FETCH_OBJ);
-if($query->rowCount() > 0)
-{
-foreach($results as $result)
-{   ?>
-<option value="<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->SubjectName); ?>&nbsp; Section-<?php echo htmlentities($result->Section); ?></option>
-<?php }} ?>
- </select>          
+              
          
              
              
@@ -194,28 +244,34 @@ foreach($results as $result)
           
  </form>
 
+
     
   </div>
+  </section>
+<section>  
 
 <div class="box-container">
 
    <div class="box">
-      <i class="fas fa-phone"></i>
-      <h3>phone number</h3>
+     
+      <img src="images\call.jpg" alt="">
+      <h4> Call Us    </h4>    
       <a href="tel:1234567890">123-456-7890</a>
-      <a href="tel:1112223333">111-222-3333</a>
+      <a href="tel:066-456435670">066-456435767</a>
    </div>
 
    <div class="box">
       <i class="fas fa-envelope"></i>
-      <h3>email address</h3>
+      <img src="images/gmail.png" alt="">
+      <h4>Email us     </h4> 
       <a href="mailto:vishahigheredu@gmail.com">vishahigheredu@gmail.com</a>
-      <a href="mailto:adminwishwa@gmail.com">adminwishwa@gmail.com</a>
+      <a href="mailto:admineredu@gmail.com">admineredu@gmail.com</a>
    </div>
 
    <div class="box">
       <i class="fas fa-map-marker-alt"></i>
-      <h3>office address</h3>
+      <img src="images/location.png" alt="">
+      <h4>office address</h4>
       <a href="#">no 11/3 oruthota road gampaha</a>
    </div>
 

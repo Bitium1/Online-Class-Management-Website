@@ -140,7 +140,7 @@ CREATE TABLE `contact` (
   `roll_id` int(4) NOT NULL,
   `name` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `subject` varchar(100) NOT NULL,
+   `subject` varchar(100) NOT NULL,
   `class` varchar(100) NOT NULL,
   `mgs` varchar(255) NOT NULL,
   `Creationdate` timestamp NOT NULL DEFAULT current_timestamp()

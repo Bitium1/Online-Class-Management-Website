@@ -167,6 +167,34 @@
 
 </div>
 
+<section>
+<div class="box-container">
+
+<div class="box">
+   <i class="fas fa-graduation-cap"></i>
+   <div>
+      <h3>+1k</h3>
+      <span>online courses</span>
+   </div>
+</div>
+
+<div class="box">
+   <i class="fas fa-user-graduate"></i>
+   <div>
+      <h3>+25k</h3>
+      <span>brilliants students</span>
+   </div>
+</div>
+
+<div class="box">
+   <i class="fas fa-chalkboard-user"></i>
+   <div>
+      <h3>+5k</h3>
+      <span>expert teachers</span>
+   </div>
+</div>
+</section>
+
 </section>
 
 <!-- reviews section ends -->
