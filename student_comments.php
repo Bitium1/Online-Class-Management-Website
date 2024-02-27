@@ -27,6 +27,96 @@
                    <?php include('includes/leftbar.php');?>  
                     <!-- /.left-sidebar -->
 
+<style>
+ .row .image{
+   flex: 1 1 40rem;
+}
+
+.row .image img{
+   width: 100%;
+   height: 50rem;
+}
+
+ .row .content{
+   flex: 1 1 40rem;
+   text-align: center;
+}
+
+ .row .content h3{
+   font-size: 2.5rem;
+   color: var(--black);
+}
+
+.row .content p{
+   line-height: 2;
+   font-size: 1.8rem;
+   color: var(--light-color);
+   padding: 1rem 0;
+}
+
+.box-container{
+   margin-top: 3rem;
+   display: flex;
+   gap: 1.5rem;
+   flex-wrap: wrap;
+}
+
+ .box-container .box{
+   flex: 1 1 25rem;
+   display: flex;
+   background-color: var(--white);
+   border-radius: .5rem;
+   padding: 2rem;
+   align-items: center;
+   gap: 2rem;
+}
+
+ .box-container .box i{
+   font-size: 3rem;
+   color: var(--black);
+}
+
+.box-container .box h3{
+   color: var(--main-color);
+   font-size: 2.5rem;
+   margin-bottom: .2rem;
+}
+
+ .box-container .box span{
+   font-size: 1.6rem;
+   color: var(--light-color);
+}
+
+
+ .user{
+   display: flex;
+   align-items: center;
+   gap: 1.5rem;
+   margin-top: 1.5rem;
+}
+
+ .user img{
+   height: 5rem;
+   width: 5rem;
+   border-radius: 50%;
+   object-fit: cover;
+}
+
+ h3{
+   font-size: 2rem;
+   color: var(--black);
+   margin-bottom: .2rem;
+}
+
+.stars i{
+   color: var(--main-color);
+   font-size: 1.5rem;
+}
+
+
+
+</style>
+
                     <div class="main-page">
 
                      <div class="container-fluid">
@@ -61,8 +151,11 @@
                                                     <h5>Student Coments</h5>
                                                 </div>
                                             </div>
-                                            <div class="panel-body">
+                                           <div class="panel-body">
 
+                                         
+   
+<div class = "box-container">
    <div class="box">
       <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo fugiat, quaerat voluptate odio consectetur assumenda fugit maxime unde at ex?</p>
       <div class="user">
