@@ -23,6 +23,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Password is correct, set session variables
             $_SESSION['teacher_id'] = $row['id'];
             $_SESSION['username'] = $username;
+            // Set the cookie
+            $cookie_name = "teacher_id";
+            $cookie_value = $row['id']; // Teacher ID from the database
+            $cookie_expire = time() + (86400 * 30); // 30 days expiration time
+
+            // Set the cookie with setcookie() function
+            setcookie($cookie_name, $cookie_value, $cookie_expire, "/");
             header("Location: dashboard.php");
             exit();
         } else {

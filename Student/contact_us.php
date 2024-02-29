@@ -1,7 +1,10 @@
 <?php
 session_start();
-error_reporting(0);
+
 include('../includes/config.php');
+$msg = '';
+$error = '';
+$message ='';
 if(strlen($_SESSION['alogin'])=="")
     {   
     header("Location: ../index.php"); 
@@ -10,13 +13,14 @@ if(strlen($_SESSION['alogin'])=="")
 if(isset($_POST['submit']))
 {
     $roll_id=$_POST['roll_id'];
-    $name=$_POST['name']; 
-    $email=$_POST['email'];
-    $subject=$_POST['subject']; 
-    $class=$_POST['class'];  
+$name=$_POST['name']; 
+$email=$_POST['email'];
+$subject=$_POST['subject']; 
+$class=$_POST['class'];  
+$msg=$_POST['msg'];
+
     
-    $msg=$_POST['msg']; 
-    $sql = "INSERT INTO contact (roll_id, name, email, subject,class, msg) VALUES (:roll_id, :name, :email,  :subject,:class, :msg)";
+$sql = "INSERT INTO contact (roll_id, name, email, subject, class, mgs) VALUES (:roll_id, :name, :email, :subject, :class, :msg)";
 
     $query = $dbh->prepare($sql);
     $query->bindParam(':roll_id',$roll_id,PDO::PARAM_INT);
@@ -25,14 +29,14 @@ if(isset($_POST['submit']))
     $query->bindParam(':subject',$subject,PDO::PARAM_STR);
     $query->bindParam(':class',$class,PDO::PARAM_STR);
     $query->bindParam(':msg',$msg,PDO::PARAM_STR);
-
+   
 
     try {
         // ... (your existing code)
         $query->execute();
         $lastInsertId = $dbh->lastInsertId();
         if ($lastInsertId) {
-            $msg = "Message sent successfully";
+            $message = "Message sent successfully";
         } else {
             $error = "Something went wrong. Please try again";
         }
@@ -179,7 +183,7 @@ if(isset($_POST['submit']))
 
   <?php if($msg){?>
 <div class="alert alert-success left-icon-alert" role="alert">
- <strong>Well done!</strong><?php echo htmlentities($msg); ?>
+ <strong>Well done!</strong><?php echo htmlentities($message); ?>
  </div><?php } 
 else if($error){?>
     <div class="alert alert-danger left-icon-alert" role="alert">
@@ -190,7 +194,7 @@ else if($error){?>
       <form  name="contact" method="post" >
           <div class="form-group has-success">
           <label for="rollid">Enter your Roll Id</label>
-          <input type="text" class="form-control" id="rollid" placeholder="Enter Your Roll Id" autocomplete="off" name="rollid">
+          <input type="text" class="form-control" id="roll_id" placeholder="Enter Your Roll Id" autocomplete="off" name="roll_id">
           <label for="name">Enter your name</label>
           <input type="text" class="form-control" id="name" placeholder="Enter Your name" autocomplete="off" name="name">
           <label for="email">Enter your Email</label>
@@ -208,7 +212,8 @@ if($query->rowCount() > 0)
 {
 foreach($results as $result)
 {   ?>
-<option value="<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->SubjectName); ?>&nbsp; Section-<?php echo htmlentities($result->Section); ?></option>
+
+<option value="<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->SubjectName); ?>&nbsp; </option>
 <?php }} ?>
  </select>      
           
@@ -235,7 +240,7 @@ foreach($results as $result)
 <label for="message">Enter your message</label>         
 <textarea name="msg" class="box" placeholder="enter your message here" required cols="100" rows="10" maxlength="1000"></textarea>
               
-<button type="submit" class="btn btn-success btn-labeled pull-right">send<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span></button>
+<button type="submit" name="submit" class="btn btn-success btn-labeled pull-right">send<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span></button>
               
          
 
