@@ -128,3 +128,4 @@ CREATE TABLE video (
 );
 
 
+ALTER TABLE comments CHANGE COLUMN content_id video_id int(11);

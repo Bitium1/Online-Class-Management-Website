@@ -2,34 +2,44 @@
 session_start();
 include('config.php');
 
-if(strlen($_SESSION['alogin']) == "") {   
+if (strlen($_SESSION['alogin']) == "") {   
     header("Location: index.php"); 
     exit(); 
 } else {
     $teacherId = null; // Initialize $teacherId variable
-
+    $subjectId = null;
     if (isset($_SESSION['username'])) {
         $username = $_SESSION['username'];
-        $sql = "SELECT id FROM teacher WHERE username = :username";
+        $sql = "SELECT subjectid FROM student WHERE username = :username";
         $stmt = $dbh->prepare($sql);
         $stmt->bindParam(':username', $username, PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $teacherId = $result['id'];
+        $subjectId = $result['subjectid'];
         
     } else {
         echo "Username not available.";
     }
+    $sql = "SELECT teacher_id FROM tblsubjects WHERE id = :subjectid";
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':subjectid', $subjectId, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if(isset($_POST['delete_video'])){
+    // Check if $result is not false before accessing $result['teacher_id']
+    if ($result !== false) {
+        $teacherId = $result['teacher_id'];
+    }
+    
+    if (isset($_POST['delete_video'])) {
         $delete_id = $_POST['video_id'];
         $delete_id = filter_var($delete_id, FILTER_SANITIZE_STRING);
         $verify_video = $dbh->prepare("SELECT * FROM `video` WHERE id = ? LIMIT 1");
         $verify_video->execute([$delete_id]);
-        if($verify_video->rowCount() > 0){
+        if ($verify_video->rowCount() > 0) {
             $fetch_thumb = $verify_video->fetch(PDO::FETCH_ASSOC);
-            unlink('uploaded_files/'.$fetch_thumb['thumbnail']);
-            unlink('uploaded_files/'.$fetch_thumb['video']);
+            unlink('../uploaded_files/' . $fetch_thumb['thumbnail']);
+            unlink('../uploaded_files/' . $fetch_thumb['video']);
             $delete_content = $dbh->prepare("DELETE FROM `video` WHERE id = ?");
             $delete_content->execute([$delete_id]);
             $message[] = 'Video deleted!';
@@ -38,6 +48,19 @@ if(strlen($_SESSION['alogin']) == "") {
         }
     }
 }
+
+// Check if $teacherId is set before querying the subjects
+if ($teacherId) {
+    $stmt = $dbh->prepare("SELECT SubjectName FROM tblsubjects WHERE teacher_id = ?");
+    $stmt->execute([$teacherId]);
+    $subjects = $stmt->fetchAll(PDO::FETCH_COLUMN);
+} else {
+    // If $teacherId is not set, set $subjects to an empty array
+    $subjects = [];
+}
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,24 +74,24 @@ if(strlen($_SESSION['alogin']) == "") {
     <title>View Video</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <!--<link rel="stylesheet" href="css/admin_style.css">-->
-    <link rel="stylesheet" href="css/bootstrap.min.css" media="screen" >
-    <link rel="stylesheet" href="css/font-awesome.min.css" media="screen" >
-    <link rel="stylesheet" href="css/animate-css/animate.min.css" media="screen" >
-    <link rel="stylesheet" href="css/lobipanel/lobipanel.min.css" media="screen" >
-    <link rel="stylesheet" href="css/prism/prism.css" media="screen" >
-    <link rel="stylesheet" href="css/select2/select2.min.css" >
-    <link rel="stylesheet" href="css/main.css" media="screen" >
+    <link rel="stylesheet" href="../css/bootstrap.min.css" media="screen" >
+    <link rel="stylesheet" href="../css/font-awesome.min.css" media="screen" >
+    <link rel="stylesheet" href="../css/animate-css/animate.min.css" media="screen" >
+    <link rel="stylesheet" href="../css/lobipanel/lobipanel.min.css" media="screen" >
+    <link rel="stylesheet" href="../css/prism/prism.css" media="screen" >
+    <link rel="stylesheet" href="../css/select2/select2.min.css" >
+    <link rel="stylesheet" href="../css/main.css" media="screen" >
 </head>
 <body class="top-navbar-fixed">
     <div class="main-wrapper">
         <!-- ========== TOP NAVBAR ========== -->
-        <?php include('includes/topbar.php');?> 
+        <?php include('s-topbar.php');?> 
 
         <!-- ========== WRAPPER FOR BOTH SIDEBARS & MAIN CONTENT ========== -->
         <div class="content-wrapper">
             <div class="content-container">
                 <!-- ========== LEFT SIDEBAR ========== -->
-                <?php include('includes/leftbar.php');?>  
+                <?php include('s-leftbar.php');?>  
 
                 <div class="main-page">
                     <div class="container-fluid">
@@ -83,7 +106,13 @@ if(strlen($_SESSION['alogin']) == "") {
                                             <h3>View Video</h3>
                                         </div>
 
-                                   
+                                        <?php
+    // Check if $subjects is not null before using implode
+    if ($subjects) {
+        echo "SubjectName:<br>";
+        echo implode(', ', $subjects);
+    }
+    ?>
                                         
                                         <div class="panel-body">
     
@@ -123,7 +152,7 @@ if(strlen($_SESSION['alogin']) == "") {
 
                 <div class="w3-container w3-center">
                     <h6 class="title"><?= $fetch_videos['title']; ?></h6>
-                    <img src="uploaded_files/<?= $fetch_videos['thumbnail']; ?>" class="thumbnail" width=98% height=150px alt="">
+                    <img src="../uploaded_files/<?= $fetch_videos['thumbnail']; ?>" class="thumbnail" width=98% height=150px alt="">
                     <h6 class="card-subtitle mb-2 "><?= $fetch_videos['Updationdate']; ?></h6>
                     <p class="card-text"><?= $fetch_videos['description']; ?></p>
 
@@ -131,7 +160,7 @@ if(strlen($_SESSION['alogin']) == "") {
                         <form action="" method="post" class="flex-btn">
                             <input type="hidden" name="video_id" value="<?= $video_id; ?>">
                             <a href="edit-video.php?get_id=<?= $video_id; ?>" class="w3-button w3-gray btn-custom">Update</a>
-                            <a href="view_content.php?get_id=<?= $video_id; ?>" class="w3-button w3-gray btn-custom">View Video</a>
+                            <a href="s-view_content.php?get_id=<?= $video_id; ?>" class="w3-button w3-gray btn-custom">View Video</a>
 
                             <input type="submit"  value="Delete" class="w3-button w3-gray btn-custom" onclick="return confirm('Delete this video?');" name="delete_video">
                             
@@ -158,13 +187,13 @@ if(strlen($_SESSION['alogin']) == "") {
             </div>
         </div>
     </div>
-    <script src="js/jquery/jquery-2.2.4.min.js"></script>
-    <script src="js/bootstrap/bootstrap.min.js"></script>
-    <script src="js/pace/pace.min.js"></script>
-    <script src="js/lobipanel/lobipanel.min.js"></script>
-    <script src="js/iscroll/iscroll.js"></script>
-    <script src="js/prism/prism.js"></script>
-    <script src="js/select2/select2.min.js"></script>
-    <script src="js/main.js"></script>
+    <script src="../js/jquery/jquery-2.2.4.min.js"></script>
+    <script src="../js/bootstrap/bootstrap.min.js"></script>
+    <script src="../js/pace/pace.min.js"></script>
+    <script src="../js/lobipanel/lobipanel.min.js"></script>
+    <script src="../js/iscroll/iscroll.js"></script>
+    <script src="../js/prism/prism.js"></script>
+    <script src="../js/select2/select2.min.js"></script>
+    <script src="../js/main.js"></script>
 </body>
 </html>
