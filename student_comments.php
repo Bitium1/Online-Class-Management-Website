@@ -1,128 +1,62 @@
+<?php
+session_start();
+error_reporting(0);
+include('includes/config.php');
+if(strlen($_SESSION['alogin'])=="")
+    {   
+    header("Location: index.php"); 
+    }
+    else{
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
     	<meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>SRMS Admin| Student Comments< </title>
+        <title>SRMS Admin Manage Classes</title>
         <link rel="stylesheet" href="css/bootstrap.min.css" media="screen" >
         <link rel="stylesheet" href="css/font-awesome.min.css" media="screen" >
         <link rel="stylesheet" href="css/animate-css/animate.min.css" media="screen" >
         <link rel="stylesheet" href="css/lobipanel/lobipanel.min.css" media="screen" >
-        <link rel="stylesheet" href="css/prism/prism.css" media="screen" >
-        <link rel="stylesheet" href="css/select2/select2.min.css" >
+        <link rel="stylesheet" href="css/prism/prism.css" media="screen" > <!-- USED FOR DEMO HELP - YOU CAN REMOVE IT -->
+        <link rel="stylesheet" type="text/css" href="js/DataTables/datatables.min.css"/>
         <link rel="stylesheet" href="css/main.css" media="screen" >
         <script src="js/modernizr/modernizr.min.js"></script>
+          <style>
+        .errorWrap {
+    padding: 10px;
+    margin: 0 0 20px 0;
+    background: #fff;
+    border-left: 4px solid #dd3d36;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
+.succWrap{
+    padding: 10px;
+    margin: 0 0 20px 0;
+    background: #fff;
+    border-left: 4px solid #5cb85c;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+}
+        </style>
     </head>
     <body class="top-navbar-fixed">
         <div class="main-wrapper">
 
             <!-- ========== TOP NAVBAR ========== -->
-  <?php include('includes/topbar.php');?> 
+   <?php include('includes/topbar.php');?> 
             <!-- ========== WRAPPER FOR BOTH SIDEBARS & MAIN CONTENT ========== -->
             <div class="content-wrapper">
                 <div class="content-container">
-
-                    <!-- ========== LEFT SIDEBAR ========== -->
-                   <?php include('includes/leftbar.php');?>  
-                    <!-- /.left-sidebar -->
-
-<style>
- .row .image{
-   flex: 1 1 40rem;
-}
-
-.row .image img{
-   width: 100%;
-   height: 50rem;
-}
-
- .row .content{
-   flex: 1 1 40rem;
-   text-align: center;
-}
-
- .row .content h3{
-   font-size: 2.5rem;
-   color: var(--black);
-}
-
-.row .content p{
-   line-height: 2;
-   font-size: 1.8rem;
-   color: var(--light-color);
-   padding: 1rem 0;
-}
-
-.box-container{
-   margin-top: 3rem;
-   display: flex;
-   gap: 1.5rem;
-   flex-wrap: wrap;
-}
-
- .box-container .box{
-   flex: 1 1 25rem;
-   display: flex;
-   background-color: var(--white);
-   border-radius: .5rem;
-   padding: 2rem;
-   align-items: center;
-   gap: 2rem;
-}
-
- .box-container .box i{
-   font-size: 3rem;
-   color: var(--black);
-}
-
-.box-container .box h3{
-   color: var(--main-color);
-   font-size: 2.5rem;
-   margin-bottom: .2rem;
-}
-
- .box-container .box span{
-   font-size: 1.6rem;
-   color: var(--light-color);
-}
-
-
- .user{
-   display: flex;
-   align-items: center;
-   gap: 1.5rem;
-   margin-top: 1.5rem;
-}
-
- .user img{
-   height: 5rem;
-   width: 5rem;
-   border-radius: 50%;
-   object-fit: cover;
-}
-
- h3{
-   font-size: 2rem;
-   color: var(--black);
-   margin-bottom: .2rem;
-}
-
-.stars i{
-   color: var(--main-color);
-   font-size: 1.5rem;
-}
-
-
-
-</style>
+<?php include('includes/leftbar.php');?>  
 
                     <div class="main-page">
-
-                     <div class="container-fluid">
+                        <div class="container-fluid">
                             <div class="row page-title-div">
                                 <div class="col-md-6">
-                                    <h2 class="title">Student Comments</h2>
+                                    <h2 class="title">Student comments</h2>
                                 
                                 </div>
                                 
@@ -132,188 +66,152 @@
                             <div class="row breadcrumb-div">
                                 <div class="col-md-6">
                                     <ul class="breadcrumb">
-                                        <li><a href="dashboard.php"><i class="fa fa-home"></i> Home</a></li>
-                                
-                                        <li class="active">Student Comments</li>
-                                    </ul>
+            							<li><a href="dashboard.php"><i class="fa fa-home"></i> Home</a></li>
+                                        
+            							<li class="active">Student comments</li>
+            						</ul>
                                 </div>
                              
                             </div>
                             <!-- /.row -->
                         </div>
-                        <div class="container-fluid">
-                           
-                        <div class="row">
+                        <!-- /.container-fluid -->
+
+                        <section class="section">
+                            <div class="container-fluid">
+
+                             
+
+                                <div class="row">
                                     <div class="col-md-12">
+
                                         <div class="panel">
                                             <div class="panel-heading">
                                                 <div class="panel-title">
-                                                    <h5>Student Coments</h5>
+                                                    <h5>View comments</h5>
                                                 </div>
                                             </div>
-                                           <div class="panel-body">
+<?php if($msg){?>
+<div class="alert alert-success left-icon-alert" role="alert">
+ <strong>Well done!</strong><?php echo htmlentities($msg); ?>
+ </div><?php } 
+else if($error){?>
+    <div class="alert alert-danger left-icon-alert" role="alert">
+                                            <strong>Oh snap!</strong> <?php echo htmlentities($error); ?>
+                                        </div>
+                                        <?php } ?>
+                                            <div class="panel-body p-20">
+
+                                                <table id="example" class="display table table-striped table-bordered" cellspacing="0" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Student Name</th>
+                                                            <th>Class Name </th>
+                                                            <th>Subject</th>
+                                                            <th>Comment</th>
+                                                            <th>Comment Date</th>
+                                                            
+                                                        </tr>
+                                                    </thead>
+                                                    <tfoot>
+                                                        <tr>
+                                                          <th>#</th>
+                                                          <th>Student Name</th>
+                                                            <th>Class Name </th>
+                                                            <th>Subject</th>
+                                                            <th>Comment</th>
+                                                            <th>Comment Date</th> 
+                                                        </tr>
+                                                    </tfoot>
+                                                    <tbody>
+<?php $sql = "SELECT name , class , subject, mgs from contact";
+$query = $dbh->prepare($sql);
+$query->execute();
+$results=$query->fetchAll(PDO::FETCH_OBJ);
+$cnt=1;
+if($query->rowCount() > 0)
+{
+foreach($results as $result)
+{   ?>
+<tr>
+ <td><?php echo htmlentities($cnt);?></td>
+                                                            <td><?php echo htmlentities($result->name);?></td>
+                                                            <td><?php echo htmlentities($result->class);?></td>
+                                                            <td><?php echo htmlentities($result->subject);?></td>
+                                                            <td><?php echo htmlentities($result->mgs);?></td>
+                                                            <td><?php echo htmlentities($result->Creationdate);}} ?></td>
+
+
+                                                       
+                                                    
+                                                    </tbody>
+                                                </table>
 
                                          
-   
-<div class = "box-container">
-   <div class="box">
-      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo fugiat, quaerat voluptate odio consectetur assumenda fugit maxime unde at ex?</p>
-      <div class="user">
-         <img src="images/pic-2.jpg" alt="">
-         <div>
-            <h3>john deo</h3>
-            <div class="stars">
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star-half-alt"></i>
+                                                <!-- /.col-md-12 -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.col-md-6 -->
+
+                                                               
+                                                </div>
+                                                <!-- /.col-md-12 -->
+                                            </div>
+                                        </div>
+                                        <!-- /.panel -->
+                                    </div>
+                                    <!-- /.col-md-6 -->
+
+                                </div>
+                                <!-- /.row -->
+
+                            </div>
+                            <!-- /.container-fluid -->
+                        </section>
+                        <!-- /.section -->
+
+                    </div>
+                    <!-- /.main-page -->
+
+                    
+
+                </div>
+                <!-- /.content-container -->
             </div>
-         </div>
-      </div>
-   </div>
+            <!-- /.content-wrapper -->
 
-   <div class="box">
-      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo fugiat, quaerat voluptate odio consectetur assumenda fugit maxime unde at ex?</p>
-      <div class="user">
-         <img src="images/pic-3.jpg" alt="">
-         <div>
-            <h3>john deo</h3>
-            <div class="stars">
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star-half-alt"></i>
-            </div>
-         </div>
-      </div>
-   </div>
+        </div>
+        <!-- /.main-wrapper -->
 
-   <div class="box">
-      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo fugiat, quaerat voluptate odio consectetur assumenda fugit maxime unde at ex?</p>
-      <div class="user">
-         <img src="images/pic-4.jpg" alt="">
-         <div>
-            <h3>john deo</h3>
-            <div class="stars">
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star-half-alt"></i>
-            </div>
-         </div>
-      </div>
-   </div>
-
-   <div class="box">
-      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo fugiat, quaerat voluptate odio consectetur assumenda fugit maxime unde at ex?</p>
-      <div class="user">
-         <img src="images/pic-5.jpg" alt="">
-         <div>
-            <h3>john deo</h3>
-            <div class="stars">
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star-half-alt"></i>
-            </div>
-         </div>
-      </div>
-   </div>
-
-   <div class="box">
-      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo fugiat, quaerat voluptate odio consectetur assumenda fugit maxime unde at ex?</p>
-      <div class="user">
-         <img src="images/pic-6.jpg" alt="">
-         <div>
-            <h3>john deo</h3>
-            <div class="stars">
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star-half-alt"></i>
-            </div>
-         </div>
-      </div>
-   </div>
-
-   <div class="box">
-      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illo fugiat, quaerat voluptate odio consectetur assumenda fugit maxime unde at ex?</p>
-      <div class="user">
-         <img src="images/pic-7.jpg" alt="">
-         <div>
-            <h3>john deo</h3>
-            <div class="stars">
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star-half-alt"></i>
-            </div>
-         </div>
-      </div>
-   </div>
-
-</div>
-
-<section>
-<div class="box-container">
-
-<div class="box">
-   <i class="fas fa-graduation-cap"></i>
-   <div>
-      <h3>+1k</h3>
-      <span>online courses</span>
-   </div>
-</div>
-
-<div class="box">
-   <i class="fas fa-user-graduate"></i>
-   <div>
-      <h3>+25k</h3>
-      <span>brilliants students</span>
-   </div>
-</div>
-
-<div class="box">
-   <i class="fas fa-chalkboard-user"></i>
-   <div>
-      <h3>+5k</h3>
-      <span>expert teachers</span>
-   </div>
-</div>
-</section>
-
-</section>
-
-<!-- reviews section ends -->
-
- <!-- /.main-wrapper -->
- <script src="js/jquery/jquery-2.2.4.min.js"></script>
+        <!-- ========== COMMON JS FILES ========== -->
+        <script src="js/jquery/jquery-2.2.4.min.js"></script>
         <script src="js/bootstrap/bootstrap.min.js"></script>
         <script src="js/pace/pace.min.js"></script>
         <script src="js/lobipanel/lobipanel.min.js"></script>
         <script src="js/iscroll/iscroll.js"></script>
+
+        <!-- ========== PAGE JS FILES ========== -->
         <script src="js/prism/prism.js"></script>
-        <script src="js/select2/select2.min.js"></script>
+        <script src="js/DataTables/datatables.min.js"></script>
+
+        <!-- ========== THEME JS ========== -->
         <script src="js/main.js"></script>
         <script>
             $(function($) {
-                $(".js-states").select2();
-                $(".js-states-limit").select2({
-                    maximumSelectionLength: 2
-                });
-                $(".js-states-hide").select2({
-                    minimumResultsForSearch: Infinity
-                });
+                $('#example').DataTable();
+
+                $('#example2').DataTable( {
+                    "scrollY":        "300px",
+                    "scrollCollapse": true,
+                    "paging":         false
+                } );
+
+                $('#example3').DataTable();
             });
         </script>
     </body>
 </html>
-        
-
+<?php } ?>
 
