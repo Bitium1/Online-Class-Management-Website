@@ -1,29 +1,53 @@
 <?php
 session_start();
-error_reporting(0);
 include('includes/config.php');
+
+$msg = ""; // Initialize the variable $msg
+$error = ""; // Initialize the variable $error
 
 if(strlen($_SESSION['alogin'])=="") {   
     header("Location: index.php"); 
 } else {
-    if(isset($_POST['Update'])) {
-        $vid = intval($_GET['videoid']);
-        $title = $_POST['title'];
-        $description = $_POST['description']; 
-        // Add code to handle file uploads for thumbnail and video
-        $thumbnail = ""; // Placeholder for thumbnail file path
-        $video = ""; // Placeholder for video file path
+    if(isset($_POST['submit'])) {
         
-        // Update video information in the database
-        $sql = "UPDATE video SET title = :title, description = :description, thumbnail = :thumbnail, video = :video WHERE id = :vid";
+        $title = $_POST['title']; 
+        $description = $_POST['description']; 
+        $subject = $_POST['subject'];
+        $class = $_POST['class'];
+        $thumbnail = $_FILES['thumbnail']['name'];
+        $thumbnail = filter_var($thumbnail, FILTER_SANITIZE_STRING);
+        $thumb_ext = pathinfo($thumbnail, PATHINFO_EXTENSION);
+        $rename_thumb = uniqid().'.'.$thumb_ext;
+        $thumb_size = $_FILES['thumbnail']['size'];
+        $thumb_tmp_name = $_FILES['thumbnail']['tmp_name'];
+        $thumb_folder = 'uploaded_files/'.$rename_thumb;
+
+        $video = $_FILES['video']['name'];
+        $video = filter_var($video, FILTER_SANITIZE_STRING);
+        $video_ext = pathinfo($video, PATHINFO_EXTENSION);
+        $rename_video = uniqid().'.'.$video_ext;
+        $video_tmp_name = $_FILES['video']['tmp_name'];
+        $video_folder = 'uploaded_files/'.$rename_video;
+
+        $sql = "INSERT INTO video(ClassId, SubjectId, title, thumbnail, description, video) 
+                VALUES(:class, :subject, :title, :thumbnail, :description, :video)";
+                move_uploaded_file($thumb_tmp_name, $thumb_folder);
+                move_uploaded_file($video_tmp_name, $video_folder);
         $query = $dbh->prepare($sql);
         $query->bindParam(':title', $title, PDO::PARAM_STR);
+        $query->bindParam(':thumbnail',$rename_thumb, PDO::PARAM_STR);
         $query->bindParam(':description', $description, PDO::PARAM_STR);
-        $query->bindParam(':thumbnail', $thumbnail, PDO::PARAM_STR);
-        $query->bindParam(':video', $video, PDO::PARAM_STR);
-        $query->bindParam(':vid', $vid, PDO::PARAM_INT);
+        $query->bindParam(':video',$rename_video, PDO::PARAM_STR);
+        $query->bindParam(':class', $class, PDO::PARAM_STR);
+        $query->bindParam(':subject', $subject, PDO::PARAM_STR);
         $query->execute();
-        $msg = "Video info updated successfully";
+        $lastInsertId = $dbh->lastInsertId();
+        
+        if($lastInsertId) {
+            $msg = "New video uploaded!";
+        } else {
+            $error = "Something went wrong. Please try again";
+        }
     }
 }
 ?>
@@ -33,7 +57,7 @@ if(strlen($_SESSION['alogin'])=="") {
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SMS Admin Update Video</title>
+    <title>SRMS Admin Add video</title>
     <link rel="stylesheet" href="css/bootstrap.min.css" media="screen">
     <link rel="stylesheet" href="css/font-awesome.min.css" media="screen">
     <link rel="stylesheet" href="css/animate-css/animate.min.css" media="screen">
@@ -45,23 +69,27 @@ if(strlen($_SESSION['alogin'])=="") {
 </head>
 <body class="top-navbar-fixed">
     <div class="main-wrapper">
+        <!-- ========== TOP NAVBAR ========== -->
         <?php include('includes/topbar.php');?> 
+        <!-- ========== WRAPPER FOR BOTH SIDEBARS & MAIN CONTENT ========== -->
         <div class="content-wrapper">
             <div class="content-container">
+                <!-- ========== LEFT SIDEBAR ========== -->
                 <?php include('includes/leftbar.php');?>  
+                <!-- /.left-sidebar -->
                 <div class="main-page">
                     <div class="container-fluid">
                         <div class="row page-title-div">
                             <div class="col-md-6">
-                                <h2 class="title">Update Video</h2>
+                                <h2 class="title">Add video</h2>
                             </div>
                         </div>
                         <div class="row breadcrumb-div">
                             <div class="col-md-6">
                                 <ul class="breadcrumb">
                                     <li><a href="dashboard.php"><i class="fa fa-home"></i> Home</a></li>
-                                    <li>Videos</li>
-                                    <li class="active">Update Video</li>
+                                    <li>Subjects</li>
+                                    <li class="active">Add Subject Combination</li>
                                 </ul>
                             </div>
                         </div>
@@ -72,51 +100,91 @@ if(strlen($_SESSION['alogin'])=="") {
                                 <div class="panel">
                                     <div class="panel-heading">
                                         <div class="panel-title">
-                                            <h5>Update Video</h5>
+                                            <h5>Add video</h5>
                                         </div>
                                     </div>
                                     <div class="panel-body">
-                                        <?php if($msg) { ?>
+                                        <?php if($msg){?>
                                             <div class="alert alert-success left-icon-alert" role="alert">
-                                                <strong>Well done!</strong> <?php echo htmlentities($msg); ?>
+                                                <strong>Well done!</strong><?php echo htmlentities($msg); ?>
+                                            </div>
+                                        <?php } else if($error){?>
+                                            <div class="alert alert-danger left-icon-alert" role="alert">
+                                                <strong>Oh snap!</strong> <?php echo htmlentities($error); ?>
                                             </div>
                                         <?php } ?>
                                         <form class="form-horizontal" method="post" enctype="multipart/form-data">
-                                            <?php
-                                                $vid = intval($_GET['videoid']);
-                                                $sql = "SELECT * FROM video WHERE id = :vid";
-                                                $query = $dbh->prepare($sql);
-                                                $query->bindParam(':vid', $vid, PDO::PARAM_INT);
-                                                $query->execute();
-                                                $result = $query->fetch(PDO::FETCH_ASSOC);
-                                            ?>
                                             <div class="form-group">
-                                                <label for="title" class="col-sm-2 control-label">Title</label>
+                                                <label for="default" class="col-sm-2 control-label">Class</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" name="title" class="form-control" id="title" value="<?php echo htmlentities($result['title']); ?>" placeholder="Video Title" required="required">
+                                                    <select name="class" class="form-control" id="default" required="required">
+                                                        <option value="">Select Class</option>
+                                                        <?php 
+                                                        $sql = "SELECT * from tblclasses";
+                                                        $query = $dbh->prepare($sql);
+                                                        $query->execute();
+                                                        $results=$query->fetchAll(PDO::FETCH_OBJ);
+                                                        if($query->rowCount() > 0) {
+                                                            foreach($results as $result) {
+                                                        ?>
+                                                                <option value="<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->ClassName); ?>&nbsp; Section-<?php echo htmlentities($result->Section); ?></option>
+                                                        <?php 
+                                                            } 
+                                                        } 
+                                                        ?>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="description" class="col-sm-2 control-label">Description</label>
+                                                <label for="default" class="col-sm-2 control-label">Subject</label>
                                                 <div class="col-sm-10">
-                                                    <textarea name="description" class="form-control" id="description" placeholder="Video Description" required="required"><?php echo htmlentities($result['description']); ?></textarea>
+                                                    <select name="subject" class="form-control" id="default" required="required">
+                                                        <option value="">Select Subject</option>
+                                                        <?php 
+                                                        $sql = "SELECT * from tblsubjects";
+                                                        $query = $dbh->prepare($sql);
+                                                        $query->execute();
+                                                        $results=$query->fetchAll(PDO::FETCH_OBJ);
+                                                        if($query->rowCount() > 0) {
+                                                            foreach($results as $result) {
+                                                        ?>
+                                                                <option value="<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->SubjectName); ?></option>
+                                                        <?php 
+                                                            } 
+                                                        } 
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                                
+                                            <div class="form-group">
+                                                <label for="default" class="col-sm-2 control-label">Title</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="title" class="form-control" id="default" placeholder="Video Title" required="required">
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="thumbnail" class="col-sm-2 control-label">Thumbnail</label>
+                                                <label for="default" class="col-sm-2 control-label">Description</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="description" class="form-control" id="default" placeholder="Video Description" required="required">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="default" class="col-sm-2 control-label">Thumbnail</label>
                                                 <div class="col-sm-10">
                                                     <input type="file" name="thumbnail" accept="image/*" required class="box">
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="video" class="col-sm-2 control-label">Select Video</label>
+                                                <label for="default" class="col-sm-2 control-label">Select Video</label>
                                                 <div class="col-sm-10">
                                                     <input type="file" name="video" accept="video/*" required class="box">
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-sm-offset-2 col-sm-10">
-                                                    <button type="submit" name="Update" class="btn btn-primary">Update</button>
+                                                    <button type="submit" name="submit" class="btn btn-primary">Add</button>
                                                 </div>
                                             </div>
                                         </form>
