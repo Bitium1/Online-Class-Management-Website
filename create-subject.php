@@ -7,14 +7,29 @@ if(strlen($_SESSION['alogin'])=="")
     header("Location: index.php"); 
     }
     else{
+        $teacherId = null; // Initialize $teacherId variable
+
+        if (isset($_SESSION['username'])) {
+            $username = $_SESSION['username'];
+            $sql = "SELECT id FROM teacher WHERE username = :username";
+            $stmt = $dbh->prepare($sql);
+            $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $teacherId = $result['id'];
+            
+        } else {
+            echo "Username not available.";
+        }
 if(isset($_POST['submit']))
 {
 $subjectname=$_POST['subjectname'];
 $subjectcode=$_POST['subjectcode']; 
-$sql="INSERT INTO  tblsubjects(SubjectName,SubjectCode) VALUES(:subjectname,:subjectcode)";
+$sql="INSERT INTO  tblsubjects(SubjectName,SubjectCode,teacher_id) VALUES(:subjectname,:subjectcode,:id)";
 $query = $dbh->prepare($sql);
 $query->bindParam(':subjectname',$subjectname,PDO::PARAM_STR);
 $query->bindParam(':subjectcode',$subjectcode,PDO::PARAM_STR);
+$query->bindParam(':id',$teacherId,PDO::PARAM_STR);
 $query->execute();
 $lastInsertId = $dbh->lastInsertId();
 if($lastInsertId)

@@ -24,12 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['teacher_id'] = $row['id'];
             $_SESSION['username'] = $username;
             // Set the cookie
-            $cookie_name = "teacher_id";
-            $cookie_value = $row['id']; // Teacher ID from the database
-            $cookie_expire = time() + (86400 * 30); // 30 days expiration time
-
-            // Set the cookie with setcookie() function
-            setcookie($cookie_name, $cookie_value, $cookie_expire, "/");
+            if(isset($_POST['teacher_id'])) {
+                $teacher_id = $_POST['teacher_id'];
+                // Now you have the teacher_id value, you can use it as needed
+                echo "Teacher ID: " . $teacher_id;
+            } else {
+                echo "Teacher ID not found.";
+            }
             header("Location: dashboard.php");
             exit();
         } else {
@@ -181,7 +182,7 @@ else if($_POST['form_name'] === 'student'){
                                                     <?php if (isset($error)): ?>
                                                         <div><?php echo $error; ?></div>
                                                     <?php endif; ?>
-                                                    <form class="form-horizontal" method="post" name="teacher">
+                                                    <form class="form-horizontal" method="post" name="teacher" >
                                                     <input type="hidden" name="form_name" value="teacher">
                                                     	<div class="form-group">
                                                     		<label for="username" class="col-sm-2 control-label">Username</label>

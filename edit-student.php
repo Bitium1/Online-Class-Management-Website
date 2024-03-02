@@ -1,23 +1,30 @@
 <?php
 session_start();
-
+$msg='';
+$error='';
 include('includes/config.php');
 
 if(strlen($_SESSION['alogin']) == "") {   
     header("Location: index.php"); 
 } else {
-    if(isset($_POST['Update'])) {
+    if (isset($_SESSION['student_id'])) {
+        // Retrieve the student_id from the session
+        $studentId = $_SESSION['student_id'];
         
-            // Get form data
-            $studentId = intval($_GET['studentId']);
-            $firstName = isset($_POST['firstName']) ? $_POST['firstName'] : "";
-            $lastName = isset($_POST['lastName']) ? $_POST['lastName'] : "";
-            $birthdayDate = isset($_POST['birthdayDate']) ? $_POST['birthdayDate'] : "";
-            $gender = isset($_POST['gender']) ? $_POST['gender'] : "";
-            $emailAddress = isset($_POST['emailAddress']) ? $_POST['emailAddress'] : "";
-            $phoneNumber = isset($_POST['phoneNumber']) ? $_POST['phoneNumber'] : "";
-            $subject = isset($_POST['subject']) ? $_POST['subject'] : "";
-            $roleId = isset($_POST['roleId']) ? $_POST['roleId'] : "";
+        
+    $studentId = intval($_GET['student_id']);
+    if(isset($_POST['Update'])) {
+        if(isset($_POST['firstName'])) {
+            $firstName = $_POST['firstName'];
+        if(isset($_POST['lastName'])) {
+
+            $lastName = $_POST['lastName'];}
+            $birthdayDate = $_POST['birthdayDate'];
+            $gender = $_POST['gender'];
+            $emailAddress = $_POST['emailAddress'];
+            $phoneNumber = $_POST['phoneNumber'];
+            $subject = $_POST['subject'];
+            $roleId = $_POST['roleId'];
 
             // Update student information query
             $sql = "UPDATE student 
@@ -29,11 +36,11 @@ if(strlen($_SESSION['alogin']) == "") {
                         phone_number = :phoneNumber, 
                         subject = :subject, 
                         role_id = :roleId 
-                    WHERE id = :studentId";
+                    WHERE id = :student_id";
 
             // Prepare and execute the SQL statement
             $query = $dbh->prepare($sql);
-            $query->bindParam(':studentId', $studentId, PDO::PARAM_INT);
+            $query->bindParam(':student_id', $studentId, PDO::PARAM_STR);
             $query->bindParam(':firstName', $firstName, PDO::PARAM_STR);
             $query->bindParam(':lastName', $lastName, PDO::PARAM_STR);
             $query->bindParam(':birthdayDate', $birthdayDate, PDO::PARAM_STR);
@@ -45,7 +52,9 @@ if(strlen($_SESSION['alogin']) == "") {
             $query->execute();
 
             $msg="Subject Info updated successfully";
-    }
+    }}else {
+        echo "Student ID not found in session.";
+    }} 
 ?>
 
 <!DOCTYPE html>
@@ -111,17 +120,18 @@ else if($error){?>
                                         <?php } ?>
                                         <form class="form-horizontal" method="post">
                                         <?php
-                                        $studentId=intval($_GET['studentId']);
-                                        $sql = "SELECT * from student where id=:studentId";
-                                        $query = $dbh->prepare($sql);
-                                        $query->bindParam(':studentId',$studentId,PDO::PARAM_STR);
-                                        $query->execute();
+                                        $studentId = $_SESSION['student_id'];
+                                        $sql = "SELECT * from student where id=:student_id";
+                                        $query = $dbh->prepare($sql); 
+                                        $query->bindParam(':student_id',$studentId,PDO::PARAM_STR);
+
+                                        $result = $query->execute();
                                         $results=$query->fetchAll(PDO::FETCH_OBJ);
                                         $cnt=1;
-                                        if($query->rowCount() > 0)
+                                        //if($query->rowCount() > 0)
                                         {
                                             foreach($results as $result)
-                                            {   
+                                            //{  /* */
                                         ?>              
                                             <div class="form-group">
                                                 <label for="firstName" class="col-sm-2 control-label">First Name</label>
@@ -148,16 +158,26 @@ else if($error){?>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="gender" class="col-sm-2 control-label">Gender</label>
-                                                <div class="col-sm-10">
-                                                    <select class="form-control" id="gender" name="gender" required>
-                                                        <option value="">Select Gender</option>
-                                                        <option value="Male" <?php if($result->gender=="Male") echo "selected"; ?>>Male</option>
-                                                        <option value="Female" <?php if($result->gender=="Female") echo "selected"; ?>>Female</option>
-                                                        <option value="Other" <?php if($result->gender=="Other") echo "selected"; ?>>Other</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+<label for="default" class="col-sm-2 control-label">Gender</label>
+<div class="col-sm-10">
+<?php  $gndr=$result->Gender;
+if($gndr=="Male")
+{
+?>
+<input type="radio" name="gender" value="Male" required="required" checked>Male <input type="radio" name="gender" value="Female" required="required">Female <input type="radio" name="gender" value="Other" required="required">Other
+<?php }?>
+<?php  
+if($gndr=="Female")
+{
+?>
+<input type="radio" name="gender" value="Male" required="required" >Male <input type="radio" name="gender" value="Female" required="required" checked>Female <input type="radio" name="gender" value="Other" required="required">Other
+<?php }?>
+<?php  
+if($gndr=="Other")
+{
+?>
+<input type="radio" name="gender" value="Male" required="required" >Male <input type="radio" name="gender" value="Female" required="required">Female <input type="radio" name="gender" value="Other" required="required" checked>Other
+<?php }?>
                                             <div class="form-group">
                                                 <label for="emailAddress" class="col-sm-2 control-label">Email</label>
                                                 <div class="col-sm-10">
@@ -177,7 +197,7 @@ else if($error){?>
                                                     <input type="text" class="form-control" value="<?php echo htmlentities($result->subject);?>" id="subject" name="subject" placeholder="Enter Subject" required>
                                                 </div>
                                             </div>
-                                        <?php }} ?>
+                                        <?php }//} ?>
                                             <div class="form-group">
                                                 <div class="col-sm-offset-2 col-sm-10">
                                                     <button type="submit" name="Update" class="btn btn-primary">Update</button>
