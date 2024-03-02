@@ -1,4 +1,19 @@
 
+-- phpMyAdmin SQL Dump
+-- version 5.0.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Jul 06, 2023 at 11:59 AM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.4.2
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
 CREATE TABLE comments (
     id varchar(20) PRIMARY KEY,
     content_id varchar(20),
