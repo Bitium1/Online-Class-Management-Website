@@ -123,9 +123,8 @@ $totalresults=$query3->rowCount();
                                     <!-- /.col-lg-3 col-md-3 col-sm-6 col-xs-12 -->
 
 
-                                 <section class="section">
-                                <div class="container-fluid">     
-                                <div class="row">
+                                      
+                               
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 ">
                                         <a class="dashboard-stat bg-success" href="student_comments.php">
                                         <?php
@@ -144,8 +143,7 @@ $totalresults=$query3->rowCount();
                                     </div>
                                 </div>   
                                     <!-- /.col-lg-3 col-md-3 col-sm-6 col-xs-12 -->
-                                </div>
-                                </section>    
+                                   
 
                                 </div>
                                 <!-- /.row -->
