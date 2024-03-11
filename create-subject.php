@@ -7,14 +7,29 @@ if(strlen($_SESSION['alogin'])=="")
     header("Location: index.php"); 
     }
     else{
+        $teacherId = null; // Initialize $teacherId variable
+
+        if (isset($_SESSION['username'])) {
+            $username = $_SESSION['username'];
+            $sql = "SELECT id FROM teacher WHERE username = :username";
+            $stmt = $dbh->prepare($sql);
+            $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $teacherId = $result['id'];
+            
+        } else {
+            echo "Username not available.";
+        }
 if(isset($_POST['submit']))
 {
 $subjectname=$_POST['subjectname'];
 $subjectcode=$_POST['subjectcode']; 
-$sql="INSERT INTO  tblsubjects(SubjectName,SubjectCode) VALUES(:subjectname,:subjectcode)";
+$sql="INSERT INTO  tblsubjects(SubjectName,SubjectCode,teacher_id) VALUES(:subjectname,:subjectcode,:id)";
 $query = $dbh->prepare($sql);
 $query->bindParam(':subjectname',$subjectname,PDO::PARAM_STR);
 $query->bindParam(':subjectcode',$subjectcode,PDO::PARAM_STR);
+$query->bindParam(':id',$teacherId,PDO::PARAM_STR);
 $query->execute();
 $lastInsertId = $dbh->lastInsertId();
 if($lastInsertId)
@@ -34,86 +49,65 @@ $error="Something went wrong. Please try again";
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
     	<meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>SRMS Admin Create Subject</title>
-        <link rel="stylesheet" href="css/bootstrap.css" media="screen" >
+        <title>SMS Admin Subject Creation </title>
+        <link rel="stylesheet" href="css/bootstrap.min.css" media="screen" >
         <link rel="stylesheet" href="css/font-awesome.min.css" media="screen" >
         <link rel="stylesheet" href="css/animate-css/animate.min.css" media="screen" >
         <link rel="stylesheet" href="css/lobipanel/lobipanel.min.css" media="screen" >
-        <link rel="stylesheet" href="css/prism/prism.css" media="screen" > <!-- USED FOR DEMO HELP - YOU CAN REMOVE IT -->
+        <link rel="stylesheet" href="css/prism/prism.css" media="screen" >
+        <link rel="stylesheet" href="css/select2/select2.min.css" >
         <link rel="stylesheet" href="css/main.css" media="screen" >
         <script src="js/modernizr/modernizr.min.js"></script>
-         <style>
-        .errorWrap {
-    padding: 10px;
-    margin: 0 0 20px 0;
-    background: #fff;
-    border-left: 4px solid #dd3d36;
-    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-}
-.succWrap{
-    padding: 10px;
-    margin: 0 0 20px 0;
-    background: #fff;
-    border-left: 4px solid #5cb85c;
-    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-}
-        </style>
     </head>
     <body class="top-navbar-fixed">
         <div class="main-wrapper">
 
             <!-- ========== TOP NAVBAR ========== -->
-            <?php include('includes/topbar.php');?>   
-          <!-----End Top bar>
+  <?php include('includes/topbar.php');?> 
             <!-- ========== WRAPPER FOR BOTH SIDEBARS & MAIN CONTENT ========== -->
             <div class="content-wrapper">
                 <div class="content-container">
 
-<!-- ========== LEFT SIDEBAR ========== -->
-<?php include('includes/leftbar.php');?>                   
- <!-- /.left-sidebar -->
+                    <!-- ========== LEFT SIDEBAR ========== -->
+                   <?php include('includes/leftbar.php');?>  
+                    <!-- /.left-sidebar -->
 
                     <div class="main-page">
-                        <div class="container-fluid">
+
+                     <div class="container-fluid">
                             <div class="row page-title-div">
                                 <div class="col-md-6">
-                                    <h2 class="title">Create Student Subject</h2>
+                                    <h2 class="title">Subject Creation</h2>
+                                
                                 </div>
                                 
+                                <!-- /.col-md-6 text-right -->
                             </div>
                             <!-- /.row -->
                             <div class="row breadcrumb-div">
                                 <div class="col-md-6">
                                     <ul class="breadcrumb">
-            							<li><a href="dashboard.php"><i class="fa fa-home"></i> Home</a></li>
-            							<li><a href="#">Subject</a></li>
-            							<li class="active">Create Subject</li>
-            						</ul>
+                                        <li><a href="dashboard.php"><i class="fa fa-home"></i> Home</a></li>
+                                        <li> Subjects</li>
+                                        <li class="active">Create Subject</li>
+                                    </ul>
                                 </div>
-                               
+                             
                             </div>
                             <!-- /.row -->
                         </div>
-                        <!-- /.container-fluid -->
-
-                        <section class="section">
-                            <div class="container-fluid">
-
-                             
-
-                              
-
-                                <div class="row">
-                                    <div class="col-md-8 col-md-offset-2">
+                        <div class="container-fluid">
+                           
+                        <div class="row">
+                                    <div class="col-md-12">
                                         <div class="panel">
                                             <div class="panel-heading">
                                                 <div class="panel-title">
-                                                    <h5>Create Student Subject</h5>
+                                                    <h5>Create Subject</h5>
                                                 </div>
                                             </div>
-           <?php if($msg){?>
+                                            <div class="panel-body">
+<?php if($msg){?>
 <div class="alert alert-success left-icon-alert" role="alert">
  <strong>Well done!</strong><?php echo htmlentities($msg); ?>
  </div><?php } 
@@ -122,79 +116,60 @@ else if($error){?>
                                             <strong>Oh snap!</strong> <?php echo htmlentities($error); ?>
                                         </div>
                                         <?php } ?>
-  
-                                            <div class="panel-body">
-
-                                                <form method="post">
-                                                    <div class="form-group has-success">
-                                                        <label for="success" class="control-label">Subject Name</label>
-                                                		<div class="">
-                                                			<input type="text" name="subjectname" class="form-control" required="required" id="success">
-                                                           
-                                                		</div>
-                                                	</div>
-                                                       <div class="form-group has-success">
-                                                        <label for="success" class="control-label">Subject Code</label>
-                                                        <div class="">
-                                                            <input type="text" name="subjectcode" required="required" class="form-control" id="success">
-                                                         
+                                                <form class="form-horizontal" method="post">
+                                                    <div class="form-group">
+                                                        <label for="default" class="col-sm-2 control-label">Subject Name</label>
+                                                        <div class="col-sm-10">
+ <input type="text" name="subjectname" class="form-control" id="default" placeholder="Subject Name" required="required">
                                                         </div>
                                                     </div>
-                                                     
-  <div class="form-group has-success">
-
-                                                        <div class="">
-                                                           <button type="submit" name="submit" class="btn btn-success btn-labeled">Submit<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span></button>
+<div class="form-group">
+                                                        <label for="default" class="col-sm-2 control-label">Subject Code</label>
+                                                        <div class="col-sm-10">
+ <input type="text" name="subjectcode" class="form-control" id="default" placeholder="Subject Code" required="required">
+                                                        </div>
                                                     </div>
-
+                                                    
 
                                                     
+                                                    <div class="form-group">
+                                                        <div class="col-sm-offset-2 col-sm-10">
+                                                            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+                                                        </div>
+                                                    </div>
                                                 </form>
 
-                                              
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- /.col-md-8 col-md-offset-2 -->
+                                    <!-- /.col-md-12 -->
                                 </div>
-                                <!-- /.row -->
-
-                               
-                               
-
-                            </div>
-                            <!-- /.container-fluid -->
-                        </section>
-                        <!-- /.section -->
-
                     </div>
-                    <!-- /.main-page -->
-
                 </div>
                 <!-- /.content-container -->
             </div>
             <!-- /.content-wrapper -->
-
         </div>
         <!-- /.main-wrapper -->
-
-        <!-- ========== COMMON JS FILES ========== -->
         <script src="js/jquery/jquery-2.2.4.min.js"></script>
-        <script src="js/jquery-ui/jquery-ui.min.js"></script>
         <script src="js/bootstrap/bootstrap.min.js"></script>
         <script src="js/pace/pace.min.js"></script>
         <script src="js/lobipanel/lobipanel.min.js"></script>
         <script src="js/iscroll/iscroll.js"></script>
-
-        <!-- ========== PAGE JS FILES ========== -->
         <script src="js/prism/prism.js"></script>
-
-        <!-- ========== THEME JS ========== -->
+        <script src="js/select2/select2.min.js"></script>
         <script src="js/main.js"></script>
-
-
-
-        <!-- ========== ADD custom.js FILE BELOW WITH YOUR CHANGES ========== -->
+        <script>
+            $(function($) {
+                $(".js-states").select2();
+                $(".js-states-limit").select2({
+                    maximumSelectionLength: 2
+                });
+                $(".js-states-hide").select2({
+                    minimumResultsForSearch: Infinity
+                });
+            });
+        </script>
     </body>
 </html>
-<?php  } ?>
+<?PHP } ?>
