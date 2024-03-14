@@ -1,3 +1,4 @@
+
 -- phpMyAdmin SQL Dump
 -- version 5.0.1
 -- https://www.phpmyadmin.net/
@@ -13,280 +14,118 @@ START TRANSACTION;
 SET time_zone = "+00:00";
 
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+CREATE TABLE comments (
+    id varchar(20) PRIMARY KEY,
+    content_id varchar(20),
+    student_id varchar(20),
+    teacher_id varchar(20),
+    comment varchar(1000),
+    date date DEFAULT current_timestamp(),
+    INDEX(content_id),
+    INDEX(student_id),
+    INDEX(teacher_id)
+);
 
---
--- Database: `srms`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `admin`
---
-
-CREATE TABLE `admin` (
-  `id` int(11) NOT NULL,
-  `UserName` varchar(100) NOT NULL,
-  `Password` varchar(100) NOT NULL,
-  `updationDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `admin`
---
-
-INSERT INTO `admin` (`id`, `UserName`, `Password`, `updationDate`) VALUES
-(1, 'admin', '2a573cd710a689e8db2e0181286c1424', '2023-07-05 15:08:23');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblclasses`
---
-
-CREATE TABLE `tblclasses` (
-  `id` int(11) NOT NULL,
-  `ClassName` varchar(80) DEFAULT NULL,
-  `ClassNameNumeric` int(4) NOT NULL,
-  `Section` varchar(5) NOT NULL,
-  `CreationDate` timestamp NOT NULL DEFAULT current_timestamp(),
-  `UpdationDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblresult`
---
-
-CREATE TABLE `tblresult` (
-  `id` int(11) NOT NULL,
-  `StudentId` int(11) DEFAULT NULL,
-  `ClassId` int(11) DEFAULT NULL,
-  `SubjectId` int(11) DEFAULT NULL,
-  `marks` int(11) DEFAULT NULL,
-  `PostingDate` timestamp NULL DEFAULT current_timestamp(),
-  `UpdationDate` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblstudents`
---
-
-CREATE TABLE `tblstudents` (
-  `StudentId` int(11) NOT NULL,
-  `StudentName` varchar(100) NOT NULL,
-  `RollId` varchar(100) NOT NULL,
-  `StudentEmail` varchar(100) NOT NULL,
-  `Gender` varchar(10) NOT NULL,
-  `DOB` varchar(100) NOT NULL,
-  `ClassId` int(11) NOT NULL,
-  `RegDate` timestamp NOT NULL DEFAULT current_timestamp(),
-  `UpdationDate` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
-  `Status` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tblsubjectcombination`
---
-
-CREATE TABLE `tblsubjectcombination` (
-  `id` int(11) NOT NULL,
-  `ClassId` int(11) NOT NULL,
-  `SubjectId` int(11) NOT NULL,
-  `status` int(1) DEFAULT NULL,
-  `CreationDate` timestamp NOT NULL DEFAULT current_timestamp(),
-  `Updationdate` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
--- Table structure for table `VIDEO`
-CREATE TABLE `video` (
-   `id` int(11) NOT NULL,
-  `ClassId` int(11) NOT NULL,
-  `SubjectId` int(11) NOT NULL,
-  `title` varchar(20) NOT NULL,
-  `thumbnail` blob(100) NOT NULL,
-  `video` blob(100) NOT NULL,
-  `description` blob(100) NOT NULL,
-  `status` int(1) DEFAULT NULL,
-  `CreationDate` timestamp NOT NULL DEFAULT current_timestamp(),
-  `Updationdate` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
- -- --------------------------------------------------------
---
--- Table structure for table `tblsubjects`
---
-
-CREATE TABLE `tblsubjects` (
-  `id` int(11) NOT NULL,
-  `SubjectName` varchar(100) NOT NULL,
-  `SubjectCode` varchar(100) NOT NULL,
-  `Creationdate` timestamp NOT NULL DEFAULT current_timestamp(),
-  `UpdationDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
-CREATE TABLE `contact` (
-  `roll_id` int(4) NOT NULL,
-  `name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-   `subject` varchar(100) NOT NULL,
-  `class` varchar(100) NOT NULL,
-  `mgs` varchar(255) NOT NULL,
-  `Creationdate` timestamp NOT NULL DEFAULT current_timestamp()
-  ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- Indexes for dumped tables
---
-
---
--- Indexes for table `admin`
---
-ALTER TABLE `admin`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `tblclasses`
---
-ALTER TABLE `tblclasses`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `tblresult`
---
-ALTER TABLE `tblresult`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `tblstudents`
---
-ALTER TABLE `tblstudents`
-  ADD PRIMARY KEY (`StudentId`);
-
---
--- Indexes for table `tblsubjectcombination`
---
-ALTER TABLE `tblsubjectcombination`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `tblsubjects`
---
-ALTER TABLE `tblsubjects`
-  ADD PRIMARY KEY (`id`);
-
-
-
-ALTER TABLE `contact`
-  ADD PRIMARY KEY (`roll_id`);
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `admin`
---
-ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `tblclasses`
---
-ALTER TABLE `tblclasses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `tblresult`
---
-ALTER TABLE `tblresult`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `tblstudents`
---
-ALTER TABLE `tblstudents`
-  MODIFY `StudentId` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `tblsubjectcombination`
---
-ALTER TABLE `tblsubjectcombination`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
----- AUTO_INCREMENT for table `VIDEO`
---
-ALTER TABLE `video`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-  
-
---- AUTO_INCREMENT for table `contact`
---
-ALTER TABLE `contact`
-  MODIFY `roll_id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `tblsubjects`
---
-ALTER TABLE `tblsubjects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-COMMIT;
-
+CREATE TABLE contact (
+    roll_id INT(4) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    subject VARCHAR(100) NOT NULL,
+    class VARCHAR(100) NOT NULL,
+    mgs VARCHAR(255) NOT NULL,
+    Creationdate TIMESTAMP DEFAULT current_timestamp(),
+    PRIMARY KEY (roll_id)
+);
 
 CREATE TABLE student (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    first_name VARCHAR(255),
-    last_name VARCHAR(255),
-    birthday DATE,
-    gender ENUM('Male', 'Female'),
-    email VARCHAR(255),
-    phone_number VARCHAR(20),
-    subject VARCHAR(255),
-    role_id INT,
-    registration_date DATE,
-    username VARCHAR(255),
-    password VARCHAR(255)
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(50) COLLATE utf8mb4_general_ci NOT NULL,
+    last_name VARCHAR(50) COLLATE utf8mb4_general_ci NOT NULL,
+    birthday DATE NOT NULL,
+    gender ENUM('Male', 'Female', 'Other') COLLATE utf8mb4_general_ci NOT NULL,
+    email VARCHAR(100) COLLATE utf8mb4_general_ci NOT NULL,
+    phone_number VARCHAR(20) COLLATE utf8mb4_general_ci NOT NULL,
+    role_id INT(11) NOT NULL,
+    registration_date DATE DEFAULT NULL,
+    username VARCHAR(50) COLLATE utf8mb4_general_ci NOT NULL,
+    password VARCHAR(255) COLLATE utf8mb4_general_ci NOT NULL,
+    subjectid INT(11) DEFAULT NULL,
+    PRIMARY KEY (id),
+    KEY fk_student_subject (subjectid)
+);
+
+CREATE TABLE tblclasses (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    ClassName VARCHAR(80) COLLATE latin1_swedish_ci DEFAULT NULL,
+    ClassNameNumeric INT(4) NOT NULL,
+    Section VARCHAR(5) COLLATE latin1_swedish_ci NOT NULL,
+    CreationDate TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    UpdationDate TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP(),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE tblresult (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    StudentId INT(11),
+    ClassId INT(11),
+    SubjectId INT(11),
+    marks INT(11),
+    PostingDate TIMESTAMP DEFAULT current_timestamp(),
+    UpdationDate TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE tblsubjectcombination (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    ClassId INT(11),
+    SubjectId INT(11),
+    status INT(1),
+    CreationDate TIMESTAMP DEFAULT current_timestamp(),
+    Updationdate TIMESTAMP DEFAULT current_timestamp() ON UPDATE CURRENT_TIMESTAMP(),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE tblsubjects (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    SubjectName VARCHAR(100),
+    SubjectCode VARCHAR(100),
+    Creationdate TIMESTAMP DEFAULT current_timestamp(),
+    UpdationDate TIMESTAMP DEFAULT current_timestamp() ON UPDATE CURRENT_TIMESTAMP(),
+    teacher_id INT(11),
+    PRIMARY KEY (id),
+    INDEX FK_Subject_Teacher (teacher_id)
 );
 
 CREATE TABLE teacher (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    first_name VARCHAR(255) NOT NULL,
-    last_name VARCHAR(255) NOT NULL,
-    birthday DATE NOT NULL,
-    gender ENUM('Male', 'Female', 'Other') NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    phone_number VARCHAR(20) NOT NULL,
-    subject VARCHAR(255) NOT NULL,
-    registration_date DATE NOT NULL,
-    username VARCHAR(50) NOT NULL,
-    password VARCHAR(255) NOT NULL
-);
-
-
-ALTER TABLE tblsubjects
-ADD COLUMN teacher_id INT;
-
-ALTER TABLE tblsubjects
-ADD CONSTRAINT FK_Subject_Teacher
-FOREIGN KEY (teacher_id) REFERENCES teacher(id);
-
-CREATE TABLE comments (
-    id VARCHAR(20) NOT NULL,
-    content_id VARCHAR(20) NOT NULL,
-    student_id VARCHAR(20) NOT NULL,
-    teacher_id VARCHAR(20) NOT NULL,
-    comment VARCHAR(1000) NOT NULL,
-    date DATE NOT NULL DEFAULT current_timestamp(),
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    birthday DATE,
+    gender ENUM('Male', 'Female', 'Other'),
+    email VARCHAR(255),
+    phone_number VARCHAR(20),
+    subject VARCHAR(255),
+    registration_date DATE,
+    username VARCHAR(50),
+    password VARCHAR(255),
     PRIMARY KEY (id)
 );
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+CREATE TABLE video (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    ClassId INT(11),
+    SubjectId INT(11),
+    title VARCHAR(20),
+    thumbnail VARCHAR(100),
+    video VARCHAR(100),
+    description VARCHAR(250),
+    CreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Updationdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    subjectCombination VARCHAR(100),
+    teacher_id INT(11),
+    PRIMARY KEY (id),
+    FOREIGN KEY (teacher_id) REFERENCES teacher(id)
+);
+
+
+ALTER TABLE comments CHANGE COLUMN content_id video_id int(11);

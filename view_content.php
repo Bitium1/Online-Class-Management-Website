@@ -2,13 +2,50 @@
 session_start();
 include('includes/config.php');
 
-if(strlen($_SESSION['alogin']) == "") {   
-    header("Location: index.php"); 
-    exit(); // Add exit() after header to stop further execution
-} else {
-    
-    }
+$teacher_id = null; // Initialize $teacher_id variable
 
+
+
+// Redirect to view_Video.php if get_id is not set
+if(!isset($_GET['get_id'])){
+    header('location:view_Video.php');
+    exit(); // Ensure script stops execution after redirection
+} else {
+    $get_id = $_GET['get_id'];
+}
+
+// Handle delete video request
+if(isset($_POST['delete_video'])){
+    $delete_id = $_POST['video_id'];
+    $delete_id = filter_var($delete_id, FILTER_SANITIZE_STRING);
+    $verify_video = $dbh->prepare("SELECT * FROM `video` WHERE id = ? AND teacher_id = ? LIMIT 1");
+    $verify_video->execute([$delete_id, $teacher_id]);
+    if($verify_video->rowCount() > 0){
+        $fetch_thumb = $verify_video->fetch(PDO::FETCH_ASSOC);
+        unlink('uploaded_files/'.$fetch_thumb['thumbnail']);
+        unlink('uploaded_files/'.$fetch_thumb['video']);
+        $delete_content = $dbh->prepare("DELETE FROM `video` WHERE id = ?");
+        $delete_content->execute([$delete_id]);
+        $message[] = 'Video deleted!';
+    } else {
+        $message[] = 'Video not found or you do not have permission to delete it!';
+    }
+}
+
+// Handle delete comment request
+if(isset($_POST['delete_comment'])){
+    $delete_id = $_POST['comment_id'];
+    $delete_id = filter_var($delete_id, FILTER_SANITIZE_STRING);
+    $verify_comment = $dbh->prepare("SELECT * FROM `comments` WHERE id = ? AND teacher_id = ?");
+    $verify_comment->execute([$delete_id, $teacher_id]);
+    if($verify_comment->rowCount() > 0){
+       $delete_comment = $dbh->prepare("DELETE FROM `comments` WHERE id = ?");
+       $delete_comment->execute([$delete_id]);
+       $message[] = 'Comment deleted successfully!';
+    }else{
+       $message[] = 'Comment not found or you do not have permission to delete it!';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,8 +57,9 @@ if(strlen($_SESSION['alogin']) == "") {
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
     <title>View Video</title>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-    <link rel="stylesheet" href="css/admin_style.css">
+    <!--<link rel="stylesheet" href="css/admin_style.css">-->
     <link rel="stylesheet" href="css/bootstrap.min.css" media="screen" >
     <link rel="stylesheet" href="css/font-awesome.min.css" media="screen" >
     <link rel="stylesheet" href="css/animate-css/animate.min.css" media="screen" >
@@ -55,8 +93,49 @@ if(strlen($_SESSION['alogin']) == "") {
                                         </div>
                                         
                                         <div class="panel-body">
+                                            
+<section class="content">
     <div class="row">
-        
+    <?php
+    
+    $select_videos = $dbh->prepare("SELECT * FROM `video` WHERE id = ?");
+$select_videos->execute([$get_id]);
+    
+    if($select_videos->rowCount() > 0) {
+        while($fetch_videos = $select_videos->fetch(PDO::FETCH_ASSOC)) { 
+            $video_id = $fetch_videos['id'];
+      /*
+      $select_content = $dbh->prepare("SELECT * FROM `video` WHERE id = ? AND teacher_id = ?");
+      $select_content->execute([$get_id, $teacher_id]);
+      if($select_content->rowCount() > 0){
+          while($fetch_content = $select_content->fetch(PDO::FETCH_ASSOC)){
+              $video_id = $fetch_content['id'];*/
+              ?>
+   
+   <div class="container">
+   <video src="uploaded_files/<?= $fetch_videos['video']; ?>" autoplay controls width="840" height="460" poster="uploaded_files/<?= $fetch_videos['thumb']; ?>" class="video" ></video>
+
+
+      <div class="date"><i class="fas fa-calendar"></i><span><?= $fetch_videos['Updationdate']; ?></span></div>
+      <h2 class="title"><?= $fetch_videos['title']; ?></h2>
+      
+      <div class="description"><?= $fetch_videos['description']; ?></div>
+      <div class="w3-section">
+      <form action="" method="post" class="flex-btn">
+    <input type="hidden" name="video_id" value="<?= $video_id; ?>">
+    <a href="edit-video.php?get_id=<?= $video_id; ?>" class="w3-button w3-gray btn-custom btn-large">Update</a>
+    <input type="submit" value="Delete" class="w3-button w3-gray btn-custom btn-large" onclick="return confirm('Delete this video?');" name="delete_video">
+</form>
+
+                    </div>
+     
+   </div>
+   <?php
+    
+
+
+      
+   ?>
     </div>
 </div>
 
@@ -81,3 +160,4 @@ if(strlen($_SESSION['alogin']) == "") {
     <script src="js/main.js"></script>
 </body>
 </html>
+       <?php }}?>

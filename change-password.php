@@ -1,6 +1,7 @@
 <?php
 session_start();
-error_reporting(0);
+
+$msg='';
 include('includes/config.php');
 if(strlen($_SESSION['alogin'])=="")
     {   
@@ -9,10 +10,14 @@ if(strlen($_SESSION['alogin'])=="")
     else{
 if(isset($_POST['submit']))
     {
-$password=md5($_POST['password']);
-$newpassword=md5($_POST['newpassword']);
+        
+
+$password = $_POST['password'];
+$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+$newpassword=$_POST['newpassword'];
+$hashednewpassword = password_hash($newpassword, PASSWORD_DEFAULT);
 $username=$_SESSION['alogin'];
-    $sql ="SELECT Password FROM teacher WHERE UserName=:username and Password=:password";
+    $sql ="SELECT password FROM teacher WHERE username=:username and password=:password";
 $query= $dbh -> prepare($sql);
 $query-> bindParam(':username', $username, PDO::PARAM_STR);
 $query-> bindParam(':password', $password, PDO::PARAM_STR);
@@ -20,16 +25,16 @@ $query-> execute();
 $results = $query -> fetchAll(PDO::FETCH_OBJ);
 if($query -> rowCount() > 0)
 {
-$con="update teacher set Password=:newpassword where UserName=:username";
+$con="update teacher set password=:newpassword where username=:username";
 $chngpwd1 = $dbh->prepare($con);
 $chngpwd1-> bindParam(':username', $username, PDO::PARAM_STR);
-$chngpwd1-> bindParam(':newpassword', $newpassword, PDO::PARAM_STR);
+$chngpwd1-> bindParam(':newpassword', $hashednewpassword, PDO::PARAM_STR);
 $chngpwd1->execute();
 $msg="Your Password succesfully changed";
 }
 else {
 $error="Your current password is wrong";    
-}
+}}
 }
 ?>
 <!DOCTYPE html>
@@ -211,4 +216,4 @@ else if($error){?>
         <!-- ========== ADD custom.js FILE BELOW WITH YOUR CHANGES ========== -->
     </body>
 </html>
-<?php  } ?>
+<?php  } ?>

@@ -34,7 +34,7 @@
                                         <a href="#"><i class="fa fa-file-text"></i> <span>Videos</span> <i class="fa fa-angle-right arrow"></i></a>
                                         <ul class="child-nav">
 
-                                            <li><a href="view-Video.php"><i class="fa fa-newspaper-o"></i> <span>View video</span></a></li>
+                                            <li><a href="s-view-Video.php"><i class="fa fa-newspaper-o"></i> <span>View video</span></a></li>
                                            
                                            
                                         </ul>

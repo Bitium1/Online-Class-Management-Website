@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $gender = $_POST['gender'];
     $emailAddress = $_POST['emailAddress'];
     $phoneNumber = $_POST['phoneNumber'];
-    $subject = $_POST['subject']; // Corrected: Added the subject field
+    $subjectid = $_POST['subjectid']; 
     $roleId = $_POST['roleId'];
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     // Validate form inputs
-    if (empty($firstName) || empty($lastName) || empty($birthdayDate) || empty($gender) || empty($emailAddress) || empty($phoneNumber) || empty($subject) || empty($roleId) || empty($username) || empty($password) || empty($confirmPassword)) {
+    if (empty($firstName) || empty($lastName) || empty($birthdayDate) || empty($gender) || empty($emailAddress) || empty($phoneNumber) || empty($subjectid) || empty($roleId) || empty($username) || empty($password) || empty($confirmPassword)) {
         $message = 'Please fill all the fields';
     } elseif ($password !== $confirmPassword) {
         $message = 'Passwords do not match';
@@ -31,11 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $registrationDate = date('Y-m-d');
 
         // Perform database insertion
-        $sql = "INSERT INTO student (first_name, last_name, birthday, gender, email, phone_number, subject, role_id, registration_date, username, password)
-                VALUES (:firstName, :lastName, :birthdayDate, :gender, :emailAddress, :phoneNumber, :subject, :roleId, :registrationDate, :username, :password)";
-         
-        
-         
+        $sql = "INSERT INTO student (first_name, last_name, birthday, gender, email, phone_number, subjectid, role_id, registration_date, username, password)
+                VALUES (:firstName, :lastName, :birthdayDate, :gender, :emailAddress, :phoneNumber, :subjectid, :roleId, :registrationDate, :username, :password)";
         
         $query = $dbh->prepare($sql);
         $query->bindParam(':firstName', $firstName, PDO::PARAM_STR);
@@ -44,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $query->bindParam(':gender', $gender, PDO::PARAM_STR);
         $query->bindParam(':emailAddress', $emailAddress, PDO::PARAM_STR);
         $query->bindParam(':phoneNumber', $phoneNumber, PDO::PARAM_STR);
-        $query->bindParam(':subject', $subject, PDO::PARAM_STR);
+        $query->bindParam(':subjectid', $subjectid, PDO::PARAM_STR);
         $query->bindParam(':roleId', $roleId, PDO::PARAM_INT);
         $query->bindParam(':registrationDate', $registrationDate, PDO::PARAM_STR);
         $query->bindParam(':username', $username, PDO::PARAM_STR);
@@ -58,8 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
-<!-- Rest of the HTML code -->
 
 <!DOCTYPE html>
 <html>
@@ -170,7 +165,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                     <div class="form-group">
                                                                         <label for="subject" class="col-sm-2 control-label">Subject</label>
                                                                         <div class="col-sm-10">
-                                                                            <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter Subject" required>
+                                                                            <select class="form-control" id="subjectid" name="subjectid" required>
+                                                                                <option value="">Select Subject</option> <!-- Add a default option -->
+                                                                                <?php
+                                                                                // Assuming $dbh is your PDO database connection
+                                                                                $sql = "SELECT id, SubjectName FROM tblsubjects";
+                                                                                $stmt = $dbh->prepare($sql);
+                                                                                $stmt->execute();
+                                                                                $subjects = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                                                                foreach ($subjects as $subject) {
+                                                                                    echo "<option value=\"{$subject['id']}\">{$subject['SubjectName']}</option>";
+                                                                                }
+                                                                                ?>
+                                                                            </select>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
