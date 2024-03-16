@@ -9,6 +9,21 @@ $error = ""; // Initialize the variable $error
 if(strlen($_SESSION['alogin']) == "") {   
     header("Location: index.php"); 
 } else {
+    $teacherId = null; // Initialize $teacherId variable
+
+    if (isset($_SESSION['username'])) {
+        $username = $_SESSION['username'];
+        $sql = "SELECT id FROM teacher WHERE username = :username";
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $teacherId = $result['id'];
+        
+    } else {
+        echo "Username not available.";
+    }
+    
     if(isset($_POST['submit'])) {
         $class = $_POST['class'];
         $subject = $_POST['subject']; 
@@ -24,8 +39,8 @@ if(strlen($_SESSION['alogin']) == "") {
         $video = $_FILES['video']['name'];
         move_uploaded_file($_FILES['video']['tmp_name'], "video/".$video);
 
-        $sql = "INSERT INTO video(ClassId, SubjectId, title, thumbnail, description, video, status) 
-                VALUES(:class, :subject, :title, :thumbnail, :description, :video, :status)";
+        $sql = "INSERT INTO video(ClassId, SubjectId, title, thumbnail, description, video, status, teacher_id) 
+                VALUES(:class, :subject, :title, :thumbnail, :description, :video, :status, :teacher_id)";
         $query = $dbh->prepare($sql);
         $query->bindParam(':class', $class, PDO::PARAM_STR);
         $query->bindParam(':subject', $subject, PDO::PARAM_STR);
@@ -34,6 +49,7 @@ if(strlen($_SESSION['alogin']) == "") {
         $query->bindParam(':thumbnail', $thumbnail, PDO::PARAM_STR);
         $query->bindParam(':description', $description, PDO::PARAM_STR);
         $query->bindParam(':video', $video, PDO::PARAM_STR);
+        $query->bindParam(':teacher_id', $teacherId, PDO::PARAM_STR); // Corrected parameter name
         $query->execute();
         $lastInsertId = $dbh->lastInsertId();
         
@@ -45,6 +61,8 @@ if(strlen($_SESSION['alogin']) == "") {
     }
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

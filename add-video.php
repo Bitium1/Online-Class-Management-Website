@@ -8,6 +8,22 @@ $error = ""; // Initialize the variable $error
 if(strlen($_SESSION['alogin'])=="") {   
     header("Location: index.php"); 
 } else {
+    $teacherId = null; // Initialize $teacherId variable
+
+    if (isset($_SESSION['username'])) {
+        $username = $_SESSION['username'];
+        $sql = "SELECT id FROM teacher WHERE username = :username";
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $teacherId = $result['id'];
+        
+    } else {
+        echo "Username not available.";
+    }
+
+
     if(isset($_POST['submit'])) {
         
         $title = $_POST['title']; 
@@ -29,8 +45,8 @@ if(strlen($_SESSION['alogin'])=="") {
         $video_tmp_name = $_FILES['video']['tmp_name'];
         $video_folder = 'uploaded_files/'.$rename_video;
 
-        $sql = "INSERT INTO video(ClassId, SubjectId, title, thumbnail, description, video) 
-                VALUES(:class, :subject, :title, :thumbnail, :description, :video)";
+        $sql = "INSERT INTO video(ClassId, SubjectId, title, thumbnail, description, video,teacher_id) 
+                VALUES(:class, :subject, :title, :thumbnail, :description, :video, :teacherid)";
                 move_uploaded_file($thumb_tmp_name, $thumb_folder);
                 move_uploaded_file($video_tmp_name, $video_folder);
         $query = $dbh->prepare($sql);
@@ -40,6 +56,7 @@ if(strlen($_SESSION['alogin'])=="") {
         $query->bindParam(':video',$rename_video, PDO::PARAM_STR);
         $query->bindParam(':class', $class, PDO::PARAM_STR);
         $query->bindParam(':subject', $subject, PDO::PARAM_STR);
+        $query->bindParam(':teacherid', $teacherId, PDO::PARAM_STR);
         $query->execute();
         $lastInsertId = $dbh->lastInsertId();
         
