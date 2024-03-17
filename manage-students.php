@@ -129,7 +129,7 @@ if(strlen($_SESSION['alogin']) == "") {
                                                     $cnt=1;
                                                     if($query->rowCount() > 0) {
                                                         foreach($results as $result) {  
-                                                            //echo htmlentities($result->subjectid);
+                            
                                                             // Fetch subject name from tblsubjects based on subjectid
                                                             $select_subject = $dbh->prepare("SELECT SubjectName FROM `tblsubjects` WHERE id = :subjectid");
                                                             $select_subject->execute([':subjectid' => $result->subjectid]);
@@ -147,7 +147,8 @@ if(strlen($_SESSION['alogin']) == "") {
                                                                 <td><?php echo htmlentities($subject_name);?></td>
                                                                 <td><?php echo htmlentities($result->registration_date);?></td>
                                                                 <td>
-                                                                    <a href="edit-student.php?studentId=<?php echo htmlentities($result->StudentId);?>"><i class="fa fa-edit" title="Edit Record"></i></a> 
+                                                                <a href="edit-student.php?stid=<?= htmlentities($result->id) ?>"><i class="fa fa-edit" title="Edit Record"></i></a>
+
                                                                 </td>
                                                             </tr>
                                                             <?php $cnt=$cnt+1;
