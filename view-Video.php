@@ -108,7 +108,7 @@ if(strlen($_SESSION['alogin']) == "") {
                                                 $select_videos->execute([':subject' => $subject]);
                                                 if($select_videos->rowCount() > 0) {
                                                     ?>
-                                                    <h6 class="title"><?= $subject ?></h6>
+                                                    <h3 class="title"><?= $subject ?></h3>
                                                     <div class="row">
                                                         <?php
                                                         $count = 0;
@@ -127,11 +127,10 @@ if(strlen($_SESSION['alogin']) == "") {
                                                                         <p class="card-text"><?= $fetch_videos['description']; ?></p>
                                                                         <div class="w3-section">
                                                                             <form action="" method="post" class="flex-btn">
-                                                                                <input type="hidden" name="video_id" value="<?= $video_id; ?>">
-                                                                                <a href="edit-video.php?get_id=<?= $video_id; ?>" class="w3-button w3-gray btn-custom">Update</a>
-                                                                                <a href="view_content.php?get_id=<?= $video_id; ?>" class="w3-button w3-gray btn-custom">View Video</a>
-                                                                                <input type="submit"  value="Delete" class="w3-button w3-gray btn-custom" onclick="return confirm('Delete this video?');" name="delete_video">
-                                                                            </form>
+    <input type="hidden" name="video_id" value="<?= $video_id; ?>">
+    <a href="view_content.php?get_id=<?= $video_id; ?>" class="w3-button w3-gray" style="width: 150px; height: 40px; margin-right: 10px;">View Video</a>
+    <input type="submit" value="Delete" class="w3-button w3-gray" style="width: 150px; height: 40px;" onclick="return confirm('Delete this video?');" name="delete_video">
+</form>
                                                                         </div>
                                                                     </div>
                                                                 </div>
