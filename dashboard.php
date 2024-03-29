@@ -123,10 +123,10 @@ $totalresults=$query3->rowCount();
                                     <!-- /.col-lg-3 col-md-3 col-sm-6 col-xs-12 -->
 
 
-                                      
+                                    
                                
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 ">
-                                        <a class="dashboard-stat bg-success" href="student_comments.php">
+                                    </br> <a class="dashboard-stat bg-success" href="student_comments.php">
                                         <?php
 $sql3="SELECT  distinct roll_id from  contact ";
 $query3 = $dbh -> prepare($sql3);
@@ -134,6 +134,7 @@ $query3->execute();
 $results3=$query3->fetchAll(PDO::FETCH_OBJ);
 $totalresults=$query3->rowCount();
 ?>
+
 
                                             <span class="number counter"><?php echo htmlentities($totalresults);?></span>
                                             <span class="name">Comments</span>

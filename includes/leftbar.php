@@ -41,9 +41,7 @@
                                         <a href="#"><i class="fa fa-file-text"></i> <span>Videos</span> <i class="fa fa-angle-right arrow"></i></a>
                                         <ul class="child-nav">
                                             <li><a href="add-video.php"><i class="fa fa-bars"></i> <span>Add Video</span></a></li>
-                                            <li><a href="manage-video.php"><i class="fa fa fa-server"></i> <span>Manage Video</span></a></li>
                                             <li><a href="view-Video.php"><i class="fa fa-newspaper-o"></i> <span>View video</span></a></li>
-                                            <li><a href="delete-video.php"><i class="fa fa fa-server"></i> <span>Delete Video</span></a></li>
                                            
                                            
                                         </ul>

@@ -1,8 +1,10 @@
 <?php
 session_start();
-error_reporting(0);
-include('includes/config.php');
 
+include('includes/config.php');
+$msg = '';
+$error = '';
+$subject = '';
 if(strlen($_SESSION['alogin']) == "") {   
     header("Location: index.php"); 
 } else {
@@ -98,7 +100,7 @@ if(strlen($_SESSION['alogin']) == "") {
                                                         <th>Roll Id</th>
                                                         <th>Subject</th>
                                                         <th>Reg Date</th>
-                                                        <th>Status</th>
+                                            
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
@@ -114,40 +116,45 @@ if(strlen($_SESSION['alogin']) == "") {
                                                         <th>Roll Id</th>
                                                         <th>Subject</th>
                                                         <th>Reg Date</th>
-                                                        <th>Status</th>
+                                                        
                                                         <th>Action</th>
                                                     </tr>
                                                 </tfoot>
                                                 <tbody>
-                                                    <?php 
+                                                <?php 
                                                     $sql = "SELECT * FROM student";
                                                     $query = $dbh->prepare($sql);
                                                     $query->execute();
                                                     $results=$query->fetchAll(PDO::FETCH_OBJ);
                                                     $cnt=1;
                                                     if($query->rowCount() > 0) {
-                                                        foreach($results as $result) {   
-                                                    ?> 
-                                                        <tr>
-                                                            <td><?php echo htmlentities($cnt);?></td>
-                                                            <td><?php echo htmlentities($result->first_name);?></td>
-                                                            <td><?php echo htmlentities($result->last_name);?></td>
-                                                            <td><?php echo htmlentities($result->birthday);?></td>
-                                                            <td><?php echo htmlentities($result->gender);?></td>
-                                                            <td><?php echo htmlentities($result->email);?></td>
-                                                            <td><?php echo htmlentities($result->phone_number);?></td>
-                                                            <td><?php echo htmlentities($result->role_id);?></td>
-                                                            <td><?php echo htmlentities($result->subject);?></td>
-                                                            <td><?php echo htmlentities($result->registration_date);?></td>
-                                                            <td><?php echo ($result->Status == 1) ? 'Active' : 'Blocked';?></td>
-                                                            <td>
-                                                                <a href="edit-student.php?studentId=<?php echo htmlentities($result->StudentId);?>"><i class="fa fa-edit" title="Edit Record"></i></a> 
-                                                            </td>
-                                                        </tr>
-                                                        <?php $cnt=$cnt+1;
+                                                        foreach($results as $result) {  
+                            
+                                                            // Fetch subject name from tblsubjects based on subjectid
+                                                            $select_subject = $dbh->prepare("SELECT SubjectName FROM `tblsubjects` WHERE id = :subjectid");
+                                                            $select_subject->execute([':subjectid' => $result->subjectid]);
+                                                            $subject_name = $select_subject->fetch(PDO::FETCH_COLUMN);
+                                                            ?>
+                                                            <tr>
+                                                                <td><?php echo htmlentities($cnt);?></td>
+                                                                <td><?php echo htmlentities($result->first_name);?></td>
+                                                                <td><?php echo htmlentities($result->last_name);?></td>
+                                                                <td><?php echo htmlentities($result->birthday);?></td>
+                                                                <td><?php echo htmlentities($result->gender);?></td>
+                                                                <td><?php echo htmlentities($result->email);?></td>
+                                                                <td><?php echo htmlentities($result->phone_number);?></td>
+                                                                <td><?php echo htmlentities($result->role_id);?></td>
+                                                                <td><?php echo htmlentities($subject_name);?></td>
+                                                                <td><?php echo htmlentities($result->registration_date);?></td>
+                                                                <td>
+                                                                <a href="edit-student.php?stid=<?= htmlentities($result->id) ?>"><i class="fa fa-edit" title="Edit Record"></i></a>
+
+                                                                </td>
+                                                            </tr>
+                                                            <?php $cnt=$cnt+1;
+                                                        }
                                                     }
-                                                }
-                                                ?>
+                                                    ?>
                                             </tbody>
                                         </table>
                                     </div>

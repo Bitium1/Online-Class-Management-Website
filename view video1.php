@@ -4,16 +4,40 @@ include('includes/config.php');
 
 if(strlen($_SESSION['alogin']) == "") {   
     header("Location: index.php"); 
-    exit(); // Add exit() after header to stop further execution
+    exit(); 
 } else {
-    // Handle form submission if needed
-}
+    $teacherId = null; // Initialize $teacherId variable
 
-// Fetch video details from the database
-$sql = "SELECT * FROM video";
-$query = $dbh->prepare($sql);
-$query->execute();
-$videos = $query->fetchAll(PDO::FETCH_ASSOC);
+    if (isset($_SESSION['username'])) {
+        $username = $_SESSION['username'];
+        $sql = "SELECT id FROM teacher WHERE username = :username";
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindParam(':username', $username, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $teacherId = $result['id'];
+        
+    } else {
+        echo "Username not available.";
+    }
+
+    if(isset($_POST['delete_video'])){
+        $delete_id = $_POST['video_id'];
+        $delete_id = filter_var($delete_id, FILTER_SANITIZE_STRING);
+        $verify_video = $dbh->prepare("SELECT * FROM `video` WHERE id = ? LIMIT 1");
+        $verify_video->execute([$delete_id]);
+        if($verify_video->rowCount() > 0){
+            $fetch_thumb = $verify_video->fetch(PDO::FETCH_ASSOC);
+            unlink('uploaded_files/'.$fetch_thumb['thumbnail']);
+            unlink('uploaded_files/'.$fetch_thumb['video']);
+            $delete_content = $dbh->prepare("DELETE FROM `video` WHERE id = ?");
+            $delete_content->execute([$delete_id]);
+            $message[] = 'Video deleted!';
+        } else {
+            $message[] = 'Video already deleted!';
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +45,12 @@ $videos = $query->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
     <title>View Video</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+   <!-- <link rel="stylesheet" href="css/admin_style.css">-->
     <link rel="stylesheet" href="css/bootstrap.min.css" media="screen" >
     <link rel="stylesheet" href="css/font-awesome.min.css" media="screen" >
     <link rel="stylesheet" href="css/animate-css/animate.min.css" media="screen" >
@@ -51,17 +80,76 @@ $videos = $query->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="panel">
                                     <div class="panel-heading">
                                         <div class="panel-title">
-                                            <h5>View Video</h5>
+                                            <h3>View Video</h3>
                                         </div>
+                                        <div class="panel-body">
+                                            <?php
+                                            // Query to retrieve the subjects corresponding to the teacher's ID
+                                            
+                                            if ($teacherId) {
+                                                $stmt = $dbh->prepare("SELECT SubjectName FROM tblsubjects WHERE teacher_id = ?");
+                                                $stmt->execute([$teacherId]);
+                                                $subjects = $stmt->fetchAll(PDO::FETCH_COLUMN);
+                                        
+                                                if ($subjects) {
+                                                    // Display the subjects
+                                                    
+                                                    foreach ($subjects as $subject) {
+                                                        
+                                                    }
+                                                }
+                                            }
+                                            ?>
+                                            <h1><?php echo implode(', ', $subjects); ?></h1>
+                                            <div class="row">
+                                                <?php
+                                                foreach ($subjects as $subject) {
+                                                    $select_videos = $dbh->prepare("SELECT v.*, s.SubjectName 
+                                                    FROM `video` v 
+                                                    INNER JOIN `tblsubjects` s ON v.subjectId = s.id 
+                                                    WHERE s.SubjectName = :subject 
+                                                    ORDER BY v.Updationdate DESC");
+                                                    $select_videos->execute([':subject' => $subject]);
+                                                    if($select_videos->rowCount() > 0) {
+                                                        while($fetch_videos = $select_videos->fetch(PDO::FETCH_ASSOC)) { 
+                                                            $video_id = $fetch_videos['id'];
+                                                ?>
+
+
+<div class="row">
+                                                
+                                                <div class="col-md-3">
+                            <div class="w3-card-4 w3-dark-grey" style="margin-bottom: 20px;">
+
+                                <div class="w3-container w3-center">
+                                    <h6 class="title"><?= $fetch_videos['title']; ?></h6>
+                                    <img src="uploaded_files/<?= $fetch_videos['thumbnail']; ?>" class="thumbnail" width=98% height=150px alt="">
+                                    <h6 class="card-subtitle mb-2 "><?= $fetch_videos['Updationdate']; ?></h6>
+                                    <p class="card-text"><?= $fetch_videos['description']; ?></p>
+
+                                    <div class="w3-section">
+                                        <form action="" method="post" class="flex-btn">
+                                            <input type="hidden" name="video_id" value="<?= $video_id; ?>">
+                                            <a href="edit-video.php?get_id=<?= $video_id; ?>" class="w3-button w3-gray btn-custom">Update</a>
+                                            <a href="view_content.php?get_id=<?= $video_id; ?>" class="w3-button w3-gray btn-custom">View Video</a>
+
+                                            <input type="submit"  value="Delete" class="w3-button w3-gray btn-custom" onclick="return confirm('Delete this video?');" name="delete_video">
+                                            
+                                        </form>
                                     </div>
-                                    <div class="panel-body">
-                                        <!-- Display videos dynamically -->
-                                        <?php foreach ($videos as $video): ?>
-                                            <video width="320" height="190" controls>
-                                                <source src="view-video.php?id=<?php echo $video['id']; ?>" type="video/mp4">
-                                                Your browser does not support the video tag.
-                                            </video>
-                                        <?php endforeach; ?>
+                                </div>
+                                </div>        </div>
+        <?php
+            }
+        }
+        ?>
+    </div>
+</div>
+
+</div>
+
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -81,3 +169,4 @@ $videos = $query->fetchAll(PDO::FETCH_ASSOC);
     <script src="js/main.js"></script>
 </body>
 </html>
+<?php }?>
