@@ -2,6 +2,7 @@
 session_start();
 
 $msg='';
+$error='';
 include('includes/config.php');
 if(strlen($_SESSION['alogin'])=="")
     {   

@@ -29,7 +29,7 @@ if(strlen($_SESSION['alogin'])=="") {
         $video_tmp_name = $_FILES['video']['tmp_name'];
         $video_folder = 'uploaded_files/'.$rename_video;
 
-        $sql = "INSERT INTO video(ClassId, SubjectId, title, thumbnail, description, video) 
+        $sql = "UPDATE video SET ClassId=:class, SubjectId=:subject, title=:title, thumbnail, description, video) 
                 VALUES(:class, :subject, :title, :thumbnail, :description, :video)";
                 move_uploaded_file($thumb_tmp_name, $thumb_folder);
                 move_uploaded_file($video_tmp_name, $video_folder);
