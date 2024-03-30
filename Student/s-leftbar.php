@@ -23,8 +23,8 @@
                                     <li class="has-children">
                                         <a href="#"><i class="fa fa-users"></i> <span>Profile</span> <i class="fa fa-angle-right arrow"></i></a>
                                         <ul class="child-nav">
-                                            <li><a href="add-students.php"><i class="fa fa-bars"></i> <span>View Profile</span></a></li>
-                                            <li><a href="manage-students.php"><i class="fa fa fa-server"></i> <span>Manage Profile</span></a></li>
+                                            <li><a href="s-view-profile.php"><i class="fa fa-bars"></i> <span>View Profile</span></a></li>
+                                            <li><a href="s-manage-profile.php"><i class="fa fa fa-server"></i> <span>Manage Profile</span></a></li>
                                            
                                         </ul>
                                     </li>
@@ -49,22 +49,12 @@
                                         </ul>
                                         
 <li class="has-children">
-                                        <a href="#"><i class="fa fa-file-text"></i> <span>contact us</span> <i class="fa fa-angle-right arrow"></i></a>
-                                        <ul class="child-nav">
+<li><a href="contact_us.php"><i class="fa fa fa-server"></i> <span>contact us</span></a></li>
+                                           
+                                           </li>
 
-                                            <li><a href="contact_us.php"><i class="fa fa-newspaper-o"></i> <span>contact us</span></a></li>
+                                        <li><a href="s-change-password.php"><i class="fa fa fa-server"></i> <span>Change Password</span></a></li>
                                            
-                                           
-                                        </ul>
-                                    </li> 
- <li class="has-children">
-                                        <a href="#"><i class="fa fa-file-text"></i> <span>change password</span> <i class="fa fa-angle-right arrow"></i></a>
-                                        <ul class="child-nav">
-
-                                            <li><a href="s-change-password.php"><i class="fa fa-newspaper-o"></i> <span>change password</span></a></li>
-                                           
-                                           
-                                        </ul>
                                     </li>                                                                                          
                             </div>
                             <!-- /.sidebar-nav -->
