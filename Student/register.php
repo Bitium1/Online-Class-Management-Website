@@ -186,6 +186,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                         </div>
                                                                     </div>
                                                                 </form>
+
+                                                                             <p class="link">Already have an account? <a href="../index.php">loging</a></p>
+                                                                             
                                                             </div>
                                                         </div>
                                                     </div>

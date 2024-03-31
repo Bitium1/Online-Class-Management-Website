@@ -166,9 +166,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                                     <div class="form-group">
                                                                         <div class="col-sm-offset-2 col-sm-10">
                                                                             <button type="submit" name="register" class="btn btn-success btn-labeled pull-right">Register<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span></button>
+
+                                                                            
+                                                                        
+
                                                                         </div>
                                                                     </div>
                                                                 </form>
+                                                                <p class="link">Already have an account? <a href="index.php">loging</a></p>
+                                                                             
                                                             </div>
                                                         </div>
                                                     </div>
