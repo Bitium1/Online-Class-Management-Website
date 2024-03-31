@@ -1,101 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-   <meta charset="UTF-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>login</title>
-
-   <!-- font awesome cdn link  -->
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
-   <link href='https://fonts.googleapis.com/css?family=Gravitas One' rel='stylesheet'>
-   <!-- custom css file link  -->
-   <link rel="stylesheet" href="css/style.css">
-
+    <title>Registration Form</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Online Class Management System</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" media="screen">
+    <link rel="stylesheet" href="css/font-awesome.min.css" media="screen">
+    <link rel="stylesheet" href="css/animate-css/animate.min.css" media="screen">
+    <link rel="stylesheet" href="css/prism/prism.css" media="screen"> <!-- USED FOR DEMO HELP - YOU CAN REMOVE IT -->
+    <link rel="stylesheet" href="css/main.css" media="screen">
+    <script src="js/modernizr/modernizr.min.js"></script>
 </head>
-<body>
-   
-  
-  
-<header class="header">
-   <h1 align="center" class="heading-name">Vishwa Higher Educational Institute</h1>
-   <section class="flex">
-
-      
-
-      <form action="search.html" method="post" class="search-form">
-         <input type="text" name="search_box" required placeholder="Search Courses..." maxlength="100">
-         <button type="submit" class="fas fa-search"></button>
-      </form>
-
-      <div class="icons">
-         <div id="menu-btn" class="fas fa-bars"></div>
-         <div id="search-btn" class="fas fa-search"></div>
-         <div id="user-btn" class="fas fa-user"></div>
-         <div id="toggle-btn" class="fas fa-sun"></div>
-      </div>
-
-
-   </section>
-
-</header>   
-
-<div class="side-bar">
-
-   <div id="close-btn">
-      <i class="fas fa-times"></i>
-   </div>
-
-   <div class="profile">
-      <img src="images/view-3d-woman_23-2150709984.webp" class="image" alt="">
-      <h3 class="name">Rashmika Malshani</h3>
-      <p class="role">Student</p>
-      <a href="profile.html" class="btn">View Profile</a>
-   </div>
-
-   <nav class="navbar">
-      <a href="home.html"><i class="fas fa-home"></i><span>Home</span></a>
-      <a href="about.html"><i class="fas fa-question"></i><span>About</span></a>
-      <a href="courses.html"><i class="fas fa-graduation-cap"></i><span>courses</span></a>
-      <a href="teachers.html"><i class="fas fa-chalkboard-user"></i><span>Teachers</span></a>
-      <a href="contact.html"><i class="fas fa-headset"></i><span>Contact Us</span></a>
-   </nav>
-
-</div>
-
-<section class="form-container">
-
-   <form action="" method="post" enctype="multipart/form-data">
-      <h3>Register Now</h3>
-      <p>Name <span>*</span></p>
-      <input type="text" name="name" placeholder="Enter Your Name" required maxlength="50" class="box">
-      <p>Email <span>*</span></p>
-      <input type="email" name="email" placeholder="Enter Your Email" required maxlength="50" class="box">
-      <p>Password <span>*</span></p>
-      <input type="password" name="pass" placeholder="Enter Your Password" required maxlength="20" class="box">
-      <p>Confirm Password <span>*</span></p>
-      <input type="password" name="c_pass" placeholder="Confirm Your Password" required maxlength="20" class="box">
-      <p>Select Profile <span>*</span></p>
-      <input type="file" accept="image/*" required class="box">
-      <input type="submit" value="Register now" name="submit" class="btn">
-   </form>
-
-</section>
-
-
-<footer class="footer">
-
-   <div class="container-fluid d-none d-md-block" id="headder1">
-      <div class="d-flex justify-content-between text-grey text-center">
-          <div class="p-1"><a href="mailto:info@vishwaedu.com ">      | E-mail: info@vishwaedu.com |</a>       Hotline: 011-2 214 214 |     | Whatsapp: 077-7 214 214 |</div>
-         
-      </div>
-  </div>
-</footer>
-
-<!-- custom js file link  -->
-<script src="js/script.js"></script>
-
-   
+<body class="">
+    <?php if (!empty($message)): ?>
+        <div><?php echo $message; ?></div>
+    <?php endif; ?>
+    <div class="main-wrapper">
+        <div class="">
+            <div class="row">
+                <h1 align="center">Online Class Management System</h1>
+                <div class="col-lg-11 visible-lg-block">
+                    <section class="section">
+                        <div class="row mt-40">
+                            <div class="col-md-20 col-md-offset-1 pt-70">
+                                <div class="row mt-30">
+                                    <div class="col-md-13">
+                                        <div class="panel">
+                                            <div class="panel-heading">
+                                                <div class="panel-title text-center">
+                                                    <h4>Students Registration Form</h4>
+                                                </div>
+                                            </div>
+                                            <div class="panel-body p-50">
+                                                <section class="vh-100 gradient-custom">
+                                                    <div class="container py-5 h-100">
+                                                        <div class="row justify-content-center align-items-center h-100">
+                                                            <div class="col-12">
+                                                                <form class="form-horizontal" method="post">
+                                                                    <div class="form-group">
+                                                                        <label for="firstName" class="col-sm-2 control-label">First Name</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="lastName" class="col-sm-2 control-label">Last Name</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter Last Name" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="birthdayDate" class="col-sm-2 control-label">Birthdate</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="date" class="form-control" id="birthdayDate" name="birthdayDate" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="gender" class="col-sm-2 control-label">Gender</label>
+                                                                        <div class="col-sm-10">
+                                                                            <select class="form-control" id="gender" name="gender" required>
+                                                                                <option value="">Select Gender</option>
+                                                                                <option value="Male">Male</option>
+                                                                                <option value="Female">Female</option>
+                                                                                <option value="Other">Other</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="emailAddress" class="col-sm-2 control-label">Email</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="email" class="form-control" id="emailAddress" name="emailAddress" placeholder="Enter Email" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="phoneNumber" class="col-sm-2 control-label">Phone Number</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="Phone Number" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="subject" class="col-sm-2 control-label">Subject</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter Subject" required>
+                                                                        </div>
+                                                                    </div>
+                                                                
+                                                                    <div class="form-group">
+                                                                        <label for="username" class="col-sm-2 control-label">Username</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="password" class="col-sm-2 control-label">Password</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="confirmPassword" class="col-sm-2 control-label">Confirm Password</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="password" class="form-control" id="confirmPassword" name="confirm_password" placeholder="Confirm Password" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-offset-2 col-sm-10">
+                                                                            <button type="submit" name="register" class="btn btn-success btn-labeled pull-right">Register<span class="btn-label btn-label-right"><i class="fa fa-check"></i></span></button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </section>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery/jquery-1.12.3.min.js"></script>
+    <script src="js/bootstrap/bootstrap.min.js"></script>
+    <script src="js/plugins/plugins.js"></script>
+    <script src="js/active.js"></script>
 </body>
 </html>
