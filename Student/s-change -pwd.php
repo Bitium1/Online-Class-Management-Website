@@ -2,39 +2,36 @@
 session_start();
 
 include('../includes/config.php');
-
-if(strlen($_SESSION['alogin']) == "") {   
+if(strlen($_SESSION['alogin'])=="")
+    {   
     header("Location: ../index.php"); 
-    
-} else {
-    if(isset($_POST['submit'])) { 
-        $username = $_SESSION['alogin'];
-        $password = $_POST['password'];
-    
-        // Retrieve hashed password from the database
-        $stmt = $dbh->prepare("SELECT id, password FROM student WHERE username = :username");
-        $stmt->bindParam(':username', $username);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-        if ($row) {
-            // Verify password
-            if (password_verify($password, $row['password'])) {
-                // Password is correct, set session variables
-                $msg = "Current Password Matching";
-                exit();
-            } else {
-                $error = "Your current password is wrong";
-            }
-        } else {
-            $error = "Your Username not found";
-        }
-    } else {
-        $error = "Your Username not ";
     }
+    else{
+if(isset($_POST['submit']))
+    {
+$password=md5($_POST['password']);
+$newpassword=md5($_POST['newpassword']);
+$username=$_SESSION['alogin'];
+    $sql ="SELECT Password FROM admin WHERE UserName=:username and Password=:password";
+$query= $dbh -> prepare($sql);
+$query-> bindParam(':username', $username, PDO::PARAM_STR);
+$query-> bindParam(':password', $password, PDO::PARAM_STR);
+$query-> execute();
+$results = $query -> fetchAll(PDO::FETCH_OBJ);
+if($query -> rowCount() > 0)
+{
+$con="update admin set Password=:newpassword where UserName=:username";
+$chngpwd1 = $dbh->prepare($con);
+$chngpwd1-> bindParam(':username', $username, PDO::PARAM_STR);
+$chngpwd1-> bindParam(':newpassword', $newpassword, PDO::PARAM_STR);
+$chngpwd1->execute();
+$msg="Your Password succesfully changed";
+}
+else {
+$error="Your current password is wrong";    
+}
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -145,7 +142,7 @@ else if($error){?>
                                     <input type="password" name="password" class="form-control" required="required" id="success">
                                                       
                                                 		</div>
-                                                	<!--</div>
+                                                	</div>
                                                        <div class="form-group has-success">
                                                         <label for="success" class="control-label">New Password</label>
                                                         <div class="">
@@ -157,7 +154,7 @@ else if($error){?>
                                                         <div class="">
                                                             <input type="password" name="confirmpassword" class="form-control" required="required" id="success">
                                                         </div>
-                                                    </div>-->
+                                                    </div>
   <div class="form-group has-success">
 
                                                         <div class="">
@@ -214,4 +211,4 @@ else if($error){?>
         <!-- ========== ADD custom.js FILE BELOW WITH YOUR CHANGES ========== -->
     </body>
 </html>
-<?php // } ?>
+<?php  } ?>

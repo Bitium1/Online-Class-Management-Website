@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+error_reporting(0);
 include('includes/config.php');
 if(strlen($_SESSION['alogin'])=="")
     {   
@@ -62,7 +62,46 @@ $error="Something went wrong. Please try again";
         <link rel="stylesheet" href="css/main.css" media="screen" >
         <script src="js/modernizr/modernizr.min.js"></script>
         <script>
+function getStudent(val) {
+    $.ajax({
+    type: "POST",
+    url: "get_student.php",
+    data:'classid='+val,
+    success: function(data){
+        $("#studentid").html(data);
+        
+    }
+    });
+$.ajax({
+        type: "POST",
+        url: "get_student.php",
+        data:'classid1='+val,
+        success: function(data){
+            $("#subject").html(data);
+            
+        }
+        });
+}
+    </script>
+<script>
 
+function getresult(val,clid) 
+{   
+    
+var clid=$(".clid").val();
+var val=$(".stid").val();;
+var abh=clid+'$'+val;
+//alert(abh);
+    $.ajax({
+        type: "POST",
+        url: "get_student.php",
+        data:'studclass='+abh,
+        success: function(data){
+            $("#reslt").html(data);
+            
+        }
+        });
+}
 </script>
 
 
@@ -122,36 +161,32 @@ else if($error){?>
                                         <?php } ?>
                                                 <form class="form-horizontal" method="post">
 
-                                                <div class="form-group">
-                                                <label for="default" class="col-sm-2 control-label">Subject</label>
-<div class="col-sm-10">
-    <select name="subject" class="form-control clid" id="subjectid" onChange="getStudentsBySubject(this.value);" required="required">
-        <option value="">Select Subject</option>
-        <?php
-        $sql = "SELECT * FROM tblsubjects";
-        $query = $dbh->prepare($sql);
-        $query->execute();
-        $results = $query->fetchAll(PDO::FETCH_OBJ);
-
-        if ($query->rowCount() > 0) {
-            foreach ($results as $result) {
-                ?>
-                <option value="<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->SubjectName); ?></option>
-                <?php
-            }
-        }
-        ?>
-    </select>
-</div>
-</div>
-
+ <div class="form-group">
+<label for="default" class="col-sm-2 control-label">Class</label>
+ <div class="col-sm-10">
+ <select name="class" class="form-control clid" id="classid" onChange="getStudent(this.value);" required="required">
+<option value="">Select Class</option>
+<?php $sql = "SELECT * from tblclasses";
+$query = $dbh->prepare($sql);
+$query->execute();
+$results=$query->fetchAll(PDO::FETCH_OBJ);
+if($query->rowCount() > 0)
+{
+foreach($results as $result)
+{   ?>
+<option value="<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->ClassName); ?>&nbsp; Section-<?php echo htmlentities($result->Section); ?></option>
+<?php }} ?>
+ </select>
+                                                        </div>
+                                                    </div>
 <div class="form-group">
-    <label for="date" class="col-sm-2 control-label">Roll Id</label>
-    <div class="col-sm-10">
-        <select name="studentid" class="form-control stid" id="studentid" required="required" onChange="getresult(this.value);">
-        </select>
-    </div>
-</div>
+                                                        <label for="date" class="col-sm-2 control-label ">Student Name</label>
+                                                        <div class="col-sm-10">
+                                                    <select name="studentid" class="form-control stid" id="studentid" required="required" onChange="getresult(this.value);">
+                                                    </select>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="form-group">
                                                       
                                                         <div class="col-sm-10">

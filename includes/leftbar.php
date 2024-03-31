@@ -75,9 +75,9 @@
                                            
                                            </li>
 
-                                        <li><a href="change-password.php"><i class="fa fa fa-server"></i> <span>Change Password</span></a></li>
+                                       <!-- <li><a href="change-password.php"><i class="fa fa fa-server"></i> <span>Change Password</span></a></li>
                                            
-                                    </li>
+                                    </li>-->
                             </div>
                             <!-- /.sidebar-nav -->
                         </div>
