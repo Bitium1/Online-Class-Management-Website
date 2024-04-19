@@ -105,8 +105,8 @@ if(strlen($_SESSION['alogin'])=="") {
                             <div class="col-md-6">
                                 <ul class="breadcrumb">
                                     <li><a href="dashboard.php"><i class="fa fa-home"></i> Home</a></li>
-                                    <li>Subjects</li>
-                                    <li class="active">Add Subject Combination</li>
+                                    <li>Videos</li>
+                                    <li class="active">Add Video</li>
                                 </ul>
                             </div>
                         </div>

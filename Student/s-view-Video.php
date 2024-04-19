@@ -32,8 +32,8 @@ if (strlen($_SESSION['alogin']) == "") {
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
     <title>View Video</title>
-    <link rel="st!--<link rel="stylesheet" href="css/admin_style.css">-->ylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-    <
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <!--<link rel="stylesheet" href="css/admin_style.css">-->
     <link rel="stylesheet" href="../css/bootstrap.min.css" media="screen" >
     <link rel="stylesheet" href="../css/font-awesome.min.css" media="screen" >
     <link rel="stylesheet" href="../css/animate-css/animate.min.css" media="screen" >

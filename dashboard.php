@@ -55,7 +55,7 @@ if(strlen($_SESSION['alogin'])=="")
                                     <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                         <a class="dashboard-stat bg-primary" href="manage-students.php">
 <?php
-$sql1 ="SELECT StudentId from tblstudents ";
+$sql1 ="SELECT id from student ";
 $query1 = $dbh -> prepare($sql1);
 $query1->execute();
 $results1=$query1->fetchAll(PDO::FETCH_OBJ);

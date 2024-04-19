@@ -1,6 +1,6 @@
 <?php
 session_start();
-error_reporting(0);
+
 include('../includes/config.php');
 ?>
 <!DOCTYPE html>
@@ -98,7 +98,7 @@ foreach($resultss as $row)
 <?php                                              
 // Code for result
 
- $query ="select t.StudentName,t.RollId,t.ClassId,t.marks,SubjectId,tblsubjects.SubjectName from (select sts.StudentName,sts.RollId,sts.ClassId,tr.marks,SubjectId from tblstudents as sts join  tblresult as tr on tr.StudentId=sts.StudentId) as t join tblsubjects on tblsubjects.id=t.SubjectId where (t.RollId=:rollid and t.ClassId=:classid)";
+$query ="select t.StudentName,t.RollId,t.ClassId,t.marks,SubjectId,tblsubjects.SubjectName from (select sts.StudentName,sts.RollId,sts.ClassId,tr.marks,SubjectId from tblstudents as sts join  tblresult as tr on tr.StudentId=sts.StudentId) as t join tblsubjects on tblsubjects.id=t.SubjectId where (t.RollId=:rollid and t.ClassId=:classid)";
 $query= $dbh -> prepare($query);
 $query->bindParam(':rollid',$rollid,PDO::PARAM_STR);
 $query->bindParam(':classid',$classid,PDO::PARAM_STR);
@@ -126,7 +126,7 @@ $cnt++;}
 <td><b><?php echo htmlentities($totlcount); ?></b> out of <b><?php echo htmlentities($outof=($cnt-1)*100); ?></b></td>
                                                         </tr>
 <tr>
-                                                <th scope="row" colspan="2">Percntage</th>           
+                                                <th scope="row" colspan="2">Percentage</th>           
                                                             <td><b><?php echo  htmlentities($totlcount*(100)/$outof); ?> %</b></td>
                                                              </tr>
 <tr>
